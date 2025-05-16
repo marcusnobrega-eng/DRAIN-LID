@@ -49,7 +49,7 @@ An integrated computational tool for modeling infiltration, ponding, vadose zone
 ├── Visualization_And_Output/  # Plots, exports, animations
 ├── Docs/                       # Manual, papers, diagrams
 └── README.md
-
+```markdown
 
 ---
 
@@ -67,7 +67,6 @@ A full user manual (LaTeX, PDF, or Overleaf) includes:
 
 ---
 
-```markdown
 ## 📂 Output Directory Example
 
 ```bash
