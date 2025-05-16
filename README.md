@@ -49,7 +49,7 @@ An integrated computational tool for modeling infiltration, ponding, vadose zone
 ├── Visualization_And_Output/  # Plots, exports, animations
 ├── Docs/                       # Manual, papers, diagrams
 └── README.md
-```markdown
+```
 
 ---
 
@@ -75,7 +75,7 @@ Results_<Scenario>/
 ├── Figures/Plots/*.png
 ├── Figures/Animations/*.mp4
 ├── Log.txt
-
+```
 
 ### Includes:
 - ⬇️ Time series of $h$, $\theta$, $q$ at all nodes  
