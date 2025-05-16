@@ -39,7 +39,6 @@ It is built to support:
 
 ## 📁 Directory Structure
 
-```bash
 📦 HydroVadose/
 ├── Main_Function/              # Main time loop, solver, data orchestration
 ├── Numerical_Solver/          # Residual & Jacobian computation
