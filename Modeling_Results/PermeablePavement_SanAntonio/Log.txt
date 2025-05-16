@@ -1,0 +1,53 @@
+=====================================================
+🔧 Mixed-Form Richards Model — Simulation Log
+=====================================================
+
+🟢 Simulation Name     : PermeablePavement_SanAntonio
+📅 Date and Time       : 12-May-2025 18:44:50
+⏱️ Duration            : 682160.00 hr
+💾 Save Interval       : 15.00 min
+
+📐 Mesh Information
+    • Number of Nodes      : 41
+    • Total Depth          : 0.33 m
+    • Top Node Elevation   : 0.00 m
+    • Min Cell Thickness   : 0.0027 m
+    • Max Cell Thickness   : 0.0107 m
+
+🌱 Soil Hydraulic Properties (Van Genuchten)
+    • α       : 13.7317 1/m
+    • n       : 2.5073 [-]
+    • m       : 0.5829 [-]
+    • θ_s     : 0.2683 [m³/m³]
+    • θ_r     : 0.0215 [m³/m³]
+    • K_s     : 1.05e-02 [m/s]
+    • S_s     : 7.12e-05 [1/m]
+
+🔲 Boundary Conditions
+    • Top BC Type     : neumann
+      > Value         : NaN
+    • Bottom BC Type  : noflow
+      > Value         : 0.0000
+
+💧 Drainage Sinks Information
+    • Orifices Enabled     : Yes
+    • Orifice Exponent(s)  : 0.50 (for each node)
+    • Orifice Coefficients : 0.0209 [m^(exp_orifice)/s]
+    • Spillway Enabled     : Yes
+    • Spillway Coefficient : 0.0000 [m^(exp_spillway)/s]
+    • Spillway Exponent    : 1.50
+    • Spillway Height      : 0.05 [m]
+
+⚙️ Solver Configuration
+    • Initial dt            : 300.0000 s
+    • Min/Max dt            : [0.1000, 300.0000] s
+    • Max Newton Iterations : 100
+    • Adapt Up/Down         : [2.00, 0.50]
+    • Convergence Threshold : 1.0e-06
+
+🛠️  Source Term Included  : Yes
+    • Total Integrated Source [m³/m²]: 0.0000
+
+=====================================================
+📍 End of Log
+=====================================================

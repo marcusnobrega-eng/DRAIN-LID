@@ -1,0 +1,53 @@
+=====================================================
+🔧 Mixed-Form Richards Model — Simulation Log
+=====================================================
+
+🟢 Simulation Name     : Large_Bioretention
+📅 Date and Time       : 12-May-2025 18:36:25
+⏱️ Duration            : 24.00 hr
+💾 Save Interval       : 15.00 min
+
+📐 Mesh Information
+    • Number of Nodes      : 41
+    • Total Depth          : 1.00 m
+    • Top Node Elevation   : 0.00 m
+    • Min Cell Thickness   : 0.0250 m
+    • Max Cell Thickness   : 0.0250 m
+
+🌱 Soil Hydraulic Properties (Van Genuchten)
+    • α       : 2.0000 1/m
+    • n       : 1.5000 [-]
+    • m       : 0.3333 [-]
+    • θ_s     : 0.4200 [m³/m³]
+    • θ_r     : 0.0400 [m³/m³]
+    • K_s     : 5.00e-04 [m/s]
+    • S_s     : 1.00e-04 [1/m]
+
+🔲 Boundary Conditions
+    • Top BC Type     : dirichlet
+      > Value         : 0.0500
+    • Bottom BC Type  : free
+      > Value         : 0.0000
+
+💧 Drainage Sinks Information
+    • Orifices Enabled     : Yes
+    • Orifice Exponent(s)  : 0.50 (for each node)
+    • Orifice Coefficients : 0.0209 [m^(exp_orifice)/s]
+    • Spillway Enabled     : Yes
+    • Spillway Coefficient : 0.0000 [m^(exp_spillway)/s]
+    • Spillway Exponent    : 1.50
+    • Spillway Height      : 0.05 [m]
+
+⚙️ Solver Configuration
+    • Initial dt            : 300.0000 s
+    • Min/Max dt            : [0.1000, 900.0000] s
+    • Max Newton Iterations : 100
+    • Adapt Up/Down         : [2.00, 0.50]
+    • Convergence Threshold : 1.0e-06
+
+🛠️  Source Term Included  : Yes
+    • Total Integrated Source [m³/m²]: 0.0000
+
+=====================================================
+📍 End of Log
+=====================================================

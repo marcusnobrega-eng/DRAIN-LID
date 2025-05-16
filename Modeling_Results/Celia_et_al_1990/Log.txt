@@ -1,0 +1,48 @@
+=====================================================
+🔧 Mixed-Form Richards Model — Simulation Log
+=====================================================
+
+🟢 Simulation Name     : Celia_et_al_1990
+📅 Date and Time       : 12-May-2025 22:21:56
+⏱️ Duration            : 24.00 hr
+💾 Save Interval       : 12.00 min
+
+📐 Mesh Information
+    • Number of Nodes      : 41
+    • Total Depth          : 1.00 m
+    • Top Node Elevation   : 0.00 m
+    • Min Cell Thickness   : 0.0250 m
+    • Max Cell Thickness   : 0.0250 m
+
+🌱 Soil Hydraulic Properties (Van Genuchten)
+    • α       : 3.5500 1/m
+    • n       : 2.0000 [-]
+    • m       : 0.5000 [-]
+    • θ_s     : 0.3680 [m³/m³]
+    • θ_r     : 0.1020 [m³/m³]
+    • K_s     : 9.22e-05 [m/s]
+    • S_s     : 0.00e+00 [1/m]
+
+🔲 Boundary Conditions
+    • Top BC Type     : dirichlet
+      > Value         : -0.7500
+    • Bottom BC Type  : dirichlet
+      > Value         : -10.0000
+
+⚙️ Solver Configuration
+    • Initial dt            : 720.0000 s
+    • Min/Max dt            : [720.0000, 720.0000] s
+    • Max Newton Iterations : 1000
+    • Adapt Up/Down         : [1.20, 0.50]
+    • Convergence Threshold : 1.0e-07
+
+🛠️  Source Term Included  : Yes
+    • Total Integrated Source [m³/m²]: 0.0000
+
+🚰 Structural Drainage Sinks
+    • No orifices enabled.
+    • Spillway at Surface: c = 2.70e+00, h_s = 0.050 m, e = 1.50
+
+=====================================================
+📍 End of Log
+=====================================================

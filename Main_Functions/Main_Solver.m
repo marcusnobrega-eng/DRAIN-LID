@@ -1,0 +1,209 @@
+%% =========================================================================
+% 📂 File Location : Numerical_Solver/Main_Solver.m
+%
+% 🧠 MIXED-FORM RICHARDS SOLVER — Time-Stepping Engine
+% -------------------------------------------------------------------------
+% Description :
+%   Solves the transient, one-dimensional mixed-form Richards Equation
+%   using an implicit Newton-Raphson method with adaptive time stepping
+%   and robust line search for convergence control.
+%
+% 💡 Governing Equation:
+%   dθ/dt + S_s·dh/dt = d/dz [K(h)·(dh/dz + 1)] - S(z,t)
+%
+%   where:
+%       θ(h)  : volumetric moisture content
+%       h     : pressure head
+%       K(h)  : unsaturated hydraulic conductivity
+%       S_s   : specific storage [1/m]
+%       S     : source/sink term [1/s]
+%
+% 🔁 Iterative Strategy:
+%   • Newton-Raphson method
+%   • Adaptive time stepping
+%   • Line search for robust damping
+%
+% Author      : Marcus Nóbrega, Ph.D.
+% Updated     : May 2025
+%% =========================================================================
+
+% === ⏱ Initialization ====================================================
+t_end = params.Tmax;
+t     = 0;
+tstep = 0;
+save_count = 0;
+save_index = 1;
+q_prev = zeros(params.Nz + 1, 1);
+cumulative_net_flux_prev = 0;
+Q_orifice = 0;
+Q_spillway = 0;
+
+% === TIME LOOP ===========================================================
+while t <= t_end
+
+    %% === 💾 Store Previous Step ==========================================
+    h_old = h;
+    h_new = h_old;
+    tstep = tstep + 1;
+    index_failure = 0;
+
+
+    ponding_prev   = ponding_depth;
+    [top_val, bottom_val, ponding_depth] = get_boundary_values(h_old, params, t, ponding_prev);
+
+    %% === 🔁 Newton-Raphson + Line Search ================================
+    for adapt_attempt = 1:20
+        converged = false;
+        source_term = interp1(params.source_times, params.source_profile', t, 'linear', 'extrap') ./ params.dz; % Original Source Term [1/sec]
+        for k = 1:params.max_iters
+            theta     = theta_vgm(h_new, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+            theta_old = theta_vgm(h_old, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+            K         = K_vgm(h_new, params.Ks, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+
+            Q_orifice_prev = Q_orifice; Q_spillway_prev = Q_spillway;
+            % === Apply structural drainage sinks before computing residual ==========
+            [source_drainage, ~, ~, Q_orifice, Q_spillway] = drainage_sinks( ...
+                h_new, (theta - params.theta_r), params.dz, params.dt, ... % Calculated with h
+                params.K_orifice, params.exp_orifice, ...
+                params.spillway_enabled, params.c_spillway, ...
+                params.h_spill, params.exp_spillway);
+
+            % === Combine total source term =================================
+            source_term_value = source_term + source_drainage;
+
+            [F, q] = compute_residual(h_new, h_old, theta, theta_old, K, params, top_val, bottom_val, source_term_value); % Original Residual with Drainage from h
+            J      = compute_jacobian(h_new, h_old, params, top_val, bottom_val, source_term); % Here we must perturbate drainage inside
+
+            delta = -(J \ F')';
+
+            %% === 🔍 Line Search: Robust Convergence =====================
+            lambda     = 1.0;  % Full Newton step
+            lambda_min = 1e-6;
+            beta       = 0.5;  % Backtracking factor
+            eta        = 1e-4; % Armijo criterion
+            res_norm_0 = norm(F);
+
+            success = false;
+            for ls_iter = 1:100
+                h_trial = h_new + lambda * delta;
+
+                theta_trial = theta_vgm(h_trial, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+                K_trial     = K_vgm(h_trial, params.Ks, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+
+                % === Apply structural drainage sinks before computing residual ==========
+                % [source_drainage, Q_orifice, Q_spillway] = drainage_sinks( ...
+                %     h_trial, (theta - params.theta_r), params.dz, params.dt, ... % Calculated with h_trial
+                %     params.K_orifice, params.exp_orifice, ...
+                %     params.spillway_enabled, params.c_spillway, ...
+                %     params.h_spill, params.exp_spillway);
+                %
+                % % === Combine total source term =================================
+                % source_term_value = source_term + source_drainage;
+
+                % F_trial     = compute_residual(h_trial, h_old, theta_trial, theta_old, K_trial, params, top_val, bottom_val, source_term_value);
+                F_trial     = compute_residual(h_trial, h_old, theta_trial, theta_old, K_trial, params, top_val, bottom_val, source_term_value);
+
+
+                if norm(F_trial) < (1 - eta * lambda) * res_norm_0
+                    h_new = h_trial;
+                    success = true;
+                    break;
+                else
+                    lambda = lambda * beta;
+                    if lambda < lambda_min
+                        break;
+                    end
+                end
+            end
+
+            %% === ✅ Check Convergence + Mass Balance =====================
+            print_error = 0;
+            [mb_error, ~, ~] = mass_balance_check( ...
+                h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, print_error);
+
+            mb_tol = 1e-3;  % Set mass balance tolerance [adjust as needed]
+
+            if norm(delta) < params.tol && norm(F) < params.tol && abs(mb_error) < mb_tol
+                converged = true;
+                break;
+            end
+        end
+
+        %% === 📊 Mass Balance ================================================
+        if tstep > 1 & converged
+            print_error = 1;
+            [mb_error, mb_error_cumulative, cumulative_net_flux] = mass_balance_check( ...
+                h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, print_error);
+        else
+            mb_error = 0;
+            mb_error_cumulative = 0;
+        end
+
+        %% === ⏱ Adaptive Timestep Control ================================
+        if converged
+            if k <= params.n_up
+                params.dt = min(params.dt * params.adapt_up, params.dt_max);
+            elseif k >= params.n_down
+                params.dt = max(params.dt * params.adapt_down, params.dt_min);
+            end
+            break;
+        else
+            params.dt = max(params.dt * params.adapt_down, params.dt_min);
+            if params.dt <= params.dt_min
+                warning('❌ Simulation failed: minimum dt reached without convergence.');
+                break
+            end
+        end
+    end
+
+    %% === 📈 Plotting ====================================================
+    if t >= plot_times(plot_index) || tstep == 1
+        if tstep == 1
+            figure('Color','w', 'Units','inches', 'Position',[1 1 7.5 7]);
+            tiledlayout(2, 2, 'TileSpacing','compact', 'Padding','compact');
+        end
+        clf;
+        plot_soil_profiles(h_new, h_old, params, t, tstep, @theta_vgm, @K_vgm, @compute_residual);
+        drawnow;
+        plot_index = plot_index + 1;
+    end
+
+    % clf;
+    % plot_soil_profiles(h_new, h_old, params, t, tstep, @theta_vgm, @K_vgm, @compute_residual);
+    % drawnow;
+    % pause(0.0001)
+    %% === 💾 Save Outputs ===============================================
+    current_save_time = params.save_interval * (save_count);
+    if t >= current_save_time || tstep == 1
+        save_count = save_count + 1;
+
+        theta_now = theta_vgm(h_new, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+        K_now     = K_vgm(h_new, params.Ks, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+        [~, q_now] = compute_residual(h_new, h_old, theta_now, theta_now, K_now, ...
+            params, top_val, bottom_val, source_term);
+
+        head_out(:, save_count)     = h_new(:);
+        theta_out(:, save_count)    = theta_now(:);
+        flux_out(:, save_count)     = q_now(:);
+        ponding_series(save_count)  = ponding_depth;
+        outlet_flux(save_count)     = q_now(1);
+        time_series(save_count)     = t;
+
+        if params.bottom_bc_type == "noflow"
+            seepage_flux(save_count) = max(0, q_now(1));
+        else
+            seepage_flux(save_count) = q_now(1);
+        end
+
+        Q_orifice_total(save_count)  = sum(Q_orifice(:));   % Total orifice flow [m³/m²/s]
+        Q_spillway_total(save_count) = sum(Q_spillway(:));  % Total spillway flow [m³/m²/s]
+
+
+        save_index = save_index + 1;
+    end
+
+    %% === ✅ Accept Time Step ===========================================
+    h = h_new;
+    t = t + params.dt;
+    q_prev = q;
+end

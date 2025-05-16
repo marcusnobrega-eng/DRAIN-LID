@@ -1,0 +1,32 @@
+============================================
+   MIXED-FORM RICHARDS SIMULATION SUMMARY
+============================================
+Simulation Name       : Ev6_May13_0110
+Date                  : 14-May-2025 18:47:40
+
+--- Domain & Discretization ---
+Number of Nodes (Nz)  : 27
+Domain Depth (L) [m]  : 0.330
+Grid Refinement (n)   : 1.10
+
+--- Time Settings ---
+Initial Δt [s]        : 300.00
+Min Δt [s]            : 0.00
+Max Δt [s]            : 300.00
+Total Time [s]        : 40929600.00
+Save Interval [s]     : 300.00
+Max Newton Iterations : 20
+
+--- Boundary Conditions ---
+Top BC Type           : neumann
+Top BC Value          : 0.000
+Bottom BC Type        : free
+Bottom BC Value       : 0.000
+
+--- Output Paths ---
+Base Folder           : Modeling_Results\Ev6_May13_0110
+Data Folder           : Modeling_Results\Ev6_May13_0110\Data
+Figures Folder        : Modeling_Results\Ev6_May13_0110\Figures
+
+--- Notes ---
+(Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)
