@@ -36,17 +36,18 @@ An integrated computational tool for modeling infiltration, ponding, vadose zone
 
 ## 📁 Directory Structure
 
+```bash
 📦 LID_Tool/
-├── Main_Function/ # Main time loop, solver
-├── Numerical_Solver/ # Residual & Jacobian computation
+├── Main_Function/               # Main time loop, solver
+├── Numerical_Solver/           # Residual & Jacobian computation
 ├── Physical_Functions_And_Utilities/
-│ ├── Van Genuchten functions
-│ ├── Mesh generation
-│ └── Drainage structure logic
-├── Forcing/ # Rainfall, runoff (SCS-CN), PET, pollutants
-├── Model_Configurations/ # Input scenarios and parameter scripts
-├── Visualization_And_Output/ # Plots, exports, animations
-├── Docs/ # Manual, papers, diagrams
+│   ├── Van Genuchten functions
+│   ├── Mesh generation
+│   └── Drainage structure logic
+├── Forcing/                    # Rainfall, runoff (SCS-CN), PET, pollutants
+├── Model_Configurations/       # Input scenarios and parameter scripts
+├── Visualization_And_Output/  # Plots, exports, animations
+├── Docs/                       # Manual, papers, diagrams
 └── README.md
 
 
@@ -66,12 +67,14 @@ A full user manual (LaTeX, PDF, or Overleaf) includes:
 
 ---
 
-## 📦 Output Directory Example
+```markdown
+## 📂 Output Directory Example
 
-Results_<scenario>/
+```bash
+Results_<Scenario>/
 ├── Data/SimulationResults.xlsx
-├── Figures/Plots/.png
-├── Figures/Animations/.mp4
+├── Figures/Plots/*.png
+├── Figures/Animations/*.mp4
 ├── Log.txt
 
 
