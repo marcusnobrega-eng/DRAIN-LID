@@ -25,7 +25,7 @@ end
 
 % === 1. DOMAIN & MESH DISCRETIZATION =====================================
 
-params.Nz = 41;               % Number of vertical nodes [-]
+params.Nz = 27;               % Number of vertical nodes [-]
 params.L  = 1.0;              % Total soil depth [m]
 nonlin_factor = 1;            % Grid refinement factor (1 = uniform)
 params.LID_area = 1000;       % 1D column area [m2]
@@ -71,8 +71,8 @@ plot_times = linspace(0, params.Tmax, n_plots);
 plot_index = 1;
 
 % Pressure Limiter for Evaporation (Feddes)
-params.h_lim_upper = -10; % [m]
-params.h_lim_down = -0.1; % [m]
+params.h_lim_upper = -0.1; % [m]
+params.h_lim_down = -4; % [m]
 
 % === 3. MULTILAYER SOIL HYDRAULIC PROPERTIES =============================
 

@@ -94,7 +94,7 @@
 % --------------------------------------------------------------------------
 %% =========================================================================
 function [F, q, q_bot, q_top] = compute_residual(h, h_old, theta, theta_old, K, ...
-                                                 params, top_bc, bottom_bc, source_term)
+                                                 params, top_bc, bottom_bc, source_term, top_bc_type_used)
 
     %% === 1. Initialize Arrays ============================================
     Nz = params.Nz;
@@ -120,6 +120,23 @@ function [F, q, q_bot, q_top] = compute_residual(h, h_old, theta, theta_old, K, 
             dhdz_bot = (h(2) - h(1)) / dz(1);
             F(1) = bottom_bc + K_bot * (dhdz_bot + 1);
 
+        % case "neumann"
+        %     % Apply enforced Neumann flux at bottom interface
+        %     q(1) = bottom_bc;
+        % 
+        %     % Compute internal flux just above bottom node
+        %     K_face = 0.5 * (K(1) + K(2));
+        %     dhdz   = (h(2) - h(1)) / dz(1);
+        %     q(2)   = -K_face * (dhdz + 1);
+        % 
+        %     % Full residual at bottom node (mass balance)
+        %     dqdz = -(q(2) - q(1)) / dz(1);
+        % 
+        %     F(1) = (theta(1) - theta_old(1)) / dt ...
+        %          + params.S_s(1) * (h(1) - h_old(1)) / dt ...
+        %          - dqdz ...
+        %          - source_term(1);
+
         case "free"
             % Unit gradient condition: ∂h/∂z = -1 → q = -K
             F(1) = h(2) - h(1);
@@ -135,24 +152,61 @@ function [F, q, q_bot, q_top] = compute_residual(h, h_old, theta, theta_old, K, 
     end
 
     %% === 3. Apply Top Boundary Condition (Node Nz) =======================
-    switch params.top_bc_type
+        % switch params.top_bc_type
+        %     case "dirichlet"
+        %         % Enforced head condition
+        %         F(Nz) = top_bc - h(Nz);
+        %         dhdz_top = (h(Nz) - h(Nz-1)) / dz(Nz);
+        %         K_top = 0.5 * (K(Nz) + K(Nz-1));
+        %         q(Nz+1) = -K_top * (dhdz_top + 1);
+        % 
+        %     case "neumann"
+        %         % Enforced flux
+        %         q(Nz+1) = top_bc;
+        %         K_top = 0.5 * (K(Nz) + K(Nz-1));
+        %         dhdz_top = (h(Nz) - h(Nz-1)) / dz(Nz);
+        %         F(Nz) = top_bc + K_top * (dhdz_top + 1);
+
+        % case "neumann"
+        %     % Apply enforced Neumann flux directly
+        %     q(Nz+1) = top_bc;
+        % 
+        %     % Compute flux just below top node
+        %     K_face = 0.5 * (K(Nz-1) + K(Nz));
+        %     dhdz   = (h(Nz) - h(Nz-1)) / dz(Nz);
+        %     q(Nz)  = -K_face * (dhdz + 1);
+        % 
+        %     % Full residual at top node (like any interior node)
+        %     dqdz = -(q(Nz+1) - q(Nz)) / dz(Nz);
+        % 
+        %     F(Nz) = (theta(Nz) - theta_old(Nz)) / dt ...
+        %           + params.S_s(Nz) * (h(Nz) - h_old(Nz)) / dt ...
+        %           - dqdz ...
+        %           - source_term(Nz);
+        % 
+        % 
+        % 
+        %     otherwise
+        %         error("Unknown top_bc_type: %s", params.top_bc_type);
+        % end
+
+    switch top_bc_type_used
         case "dirichlet"
-            % Enforced head condition
+            % Enforce head directly
             F(Nz) = top_bc - h(Nz);
             dhdz_top = (h(Nz) - h(Nz-1)) / dz(Nz);
             K_top = 0.5 * (K(Nz) + K(Nz-1));
             q(Nz+1) = -K_top * (dhdz_top + 1);
 
         case "neumann"
-            % Enforced flux
+            % Flux-specified boundary
             q(Nz+1) = top_bc;
             K_top = 0.5 * (K(Nz) + K(Nz-1));
             dhdz_top = (h(Nz) - h(Nz-1)) / dz(Nz);
             F(Nz) = top_bc + K_top * (dhdz_top + 1);
 
-
         otherwise
-            error("Unknown top_bc_type: %s", params.top_bc_type);
+            error("Unknown top_bc_type_used: %s", top_bc_type_used);
     end
 
     %% === 4. Compute Internal Face Gradients & Fluxes =====================

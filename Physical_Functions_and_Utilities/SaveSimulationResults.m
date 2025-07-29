@@ -28,6 +28,11 @@ data_length  = length(time_seconds); % [length]
 % === Create Output Excel File Path ======================================
 filename = fullfile(data_dir, 'SimulationResults.xlsx');
 
+% === Delete existing file if it exists ==================================
+if exist(filename, 'file')
+    delete(filename);
+end
+
 %% === 1. Pressure Head h(z,t) ============================================
 T_h = array2table([time_seconds, time_minutes, time_days, head_out(:,1:data_length)'], ...
     'VariableNames', ...
@@ -77,6 +82,15 @@ T_extra.Properties.VariableUnits = ...
     {'s', 'min', 'day', 'm', 'm/s', 'm/s', 'm/s', 'm/s'};
 
 writetable(T_extra, filename, 'Sheet', 'SurfaceOutlet', 'WriteVariableNames', true);
+
+%% === 5. Volume Balance Summary (Scalar Values) ==========================
+T_vol = table(inflow_vol, outflow_vol, seepage_vol, evaporation_vol, final_storage, ...
+    'VariableNames', {'InflowVol_m', 'OutflowVol_m', 'SeepageVol_m', 'EvaporationVol_m', 'final_storage_m'});
+
+T_vol.Properties.VariableUnits = {'m', 'm', 'm', 'm', 'm'};
+
+% Write to Excel
+writetable(T_vol, filename, 'Sheet', 'VolumeBalance', 'WriteVariableNames', true);
 
 %% ✅ Done
 fprintf('\n📁 Results saved to: %s\n', filename);

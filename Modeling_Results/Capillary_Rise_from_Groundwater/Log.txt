@@ -3,7 +3,7 @@
 =====================================================
 
 🟢 Simulation Name     : Capillary_Rise_from_Groundwater
-📅 Date and Time       : 10-May-2025 19:09:34
+📅 Date and Time       : 16-May-2025 10:32:03
 ⏱️ Duration            : 1.00 hr
 💾 Save Interval       : 10.00 min
 

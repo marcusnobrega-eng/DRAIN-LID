@@ -1,0 +1,48 @@
+=====================================================
+🔧 Mixed-Form Richards Model — Simulation Log
+=====================================================
+
+🟢 Simulation Name     : Example5_TopNeumann_Sandy
+📅 Date and Time       : 30-Jun-2025 17:19:22
+⏱️ Duration            : 4.00 hr
+💾 Save Interval       : 5.00 min
+
+📐 Mesh Information
+    • Number of Nodes      : 41
+    • Total Depth          : 1.00 m
+    • Top Node Elevation   : 0.00 m
+    • Min Cell Thickness   : 0.0250 m
+    • Max Cell Thickness   : 0.0250 m
+
+🌱 Soil Hydraulic Properties (Van Genuchten)
+    • α       : 14.5000 1/m
+    • n       : 2.6800 [-]
+    • m       : 0.6269 [-]
+    • θ_s     : 0.4300 [m³/m³]
+    • θ_r     : 0.0450 [m³/m³]
+    • K_s     : 8.25e-05 [m/s]
+    • S_s     : 1.00e-05 [1/m]
+
+🔲 Boundary Conditions
+    • Top BC Type     : neumann
+      > Value         : -1.0000
+    • Bottom BC Type  : free
+      > Value         : 0.0000
+
+💧 Drainage Sinks Information
+    • Orifices Enabled     : No
+    • Spillway Enabled     : No
+
+⚙️ Solver Configuration
+    • Initial dt            : 1.0000 s
+    • Min/Max dt            : [0.0100, 300.0000] s
+    • Max Newton Iterations : 40
+    • Adapt Up/Down         : [2.00, 0.50]
+    • Convergence Threshold : 1.0e-06
+
+🛠️  Source Term Included  : Yes
+    • Total Integrated Source [m³/m²]: 0.0000
+
+=====================================================
+📍 End of Log
+=====================================================

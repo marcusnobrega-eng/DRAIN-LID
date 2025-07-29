@@ -1,0 +1,32 @@
+============================================
+   MIXED-FORM RICHARDS SIMULATION SUMMARY
+============================================
+Simulation Name       : Capilarity_Rise
+Date                  : 19-May-2025 13:15:19
+
+--- Domain & Discretization ---
+Number of Nodes (Nz)  : 41
+Domain Depth (L) [m]  : 1.000
+Grid Refinement (n)   : 1.00
+
+--- Time Settings ---
+Initial Δt [s]        : 300.00
+Min Δt [s]            : 0.00
+Max Δt [s]            : 300.00
+Total Time [s]        : 172800.00
+Save Interval [s]     : 60.00
+Max Newton Iterations : 20
+
+--- Boundary Conditions ---
+Top BC Type           : dirichlet
+Top BC Value          : -1.000
+Bottom BC Type        : dirichlet
+Bottom BC Value       : 0.000
+
+--- Output Paths ---
+Base Folder           : Modeling_Results\Capilarity_Rise
+Data Folder           : Modeling_Results\Capilarity_Rise\Data
+Figures Folder        : Modeling_Results\Capilarity_Rise\Figures
+
+--- Notes ---
+(Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)

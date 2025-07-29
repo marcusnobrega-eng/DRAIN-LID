@@ -3,7 +3,7 @@
 =====================================================
 
 🟢 Simulation Name     : Large_Bioretention
-📅 Date and Time       : 12-May-2025 18:36:25
+📅 Date and Time       : 29-Jul-2025 10:08:44
 ⏱️ Duration            : 24.00 hr
 💾 Save Interval       : 15.00 min
 
@@ -40,7 +40,7 @@
 
 ⚙️ Solver Configuration
     • Initial dt            : 300.0000 s
-    • Min/Max dt            : [0.1000, 900.0000] s
+    • Min/Max dt            : [0.0100, 900.0000] s
     • Max Newton Iterations : 100
     • Adapt Up/Down         : [2.00, 0.50]
     • Convergence Threshold : 1.0e-06

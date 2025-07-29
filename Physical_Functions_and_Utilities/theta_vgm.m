@@ -24,7 +24,7 @@
 % Author     : Marcus Nóbrega, Ph.D.
 % Updated    : May 2025
 %% =========================================================================
-function theta = theta_vgm(h, theta_r, theta_s, alpha, n, m)
+function [theta, Se] = theta_vgm(h, theta_r, theta_s, alpha, n, m)
 
     % === Compute effective saturation Se = [(1 + (α|h|)^n)]^(-m)
     abs_h = abs(h);  % Ensure function is valid for all h

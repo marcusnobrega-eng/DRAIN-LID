@@ -19,15 +19,13 @@
 % Updated    : May 2025
 %% =========================================================================
 
-function plot_soil_profiles(h, h_old, params, t, tstep, theta_fun, K_fun, residual_fun)
+function plot_soil_profiles(h, h_old, params, t, tstep, theta_fun, K_fun, q_now)
 
     %% === 1. Evaluate State Variables =====================================
     theta_now = theta_fun(h, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
     K_now     = K_fun(h, params.Ks, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
     total_head = h + params.z(:)';
 
-    top_bc = 0; bottom_bc = 0; source = zeros(size(h));
-    [~, q_now] = residual_fun(h, h_old, theta_now, theta_now, K_now, params, top_bc, bottom_bc, source);
 
     % Define Nature-style color palette
     nature_colors = [

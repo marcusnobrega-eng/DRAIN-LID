@@ -16,36 +16,39 @@
 % Updated   : May 2025
 %% =========================================================================
 
-function [time_watershed_seconds, qin, Cpol] = Catchment_Outputs(dt, LID_area)
+function [time_watershed_seconds, qin, Cpol] = Catchment_Outputs(dt, LID_area, forcing_path)
 
 %% === 1. Watershed Physical Properties ===================================
-width_w      = 1;   % Watershed width [m]
-length_w     = 1;   % Watershed length [m]
+width_w      = 10;   % Watershed width [m]
+length_w     = 50;   % Watershed length [m]
 Watershed_Area = width_w * length_w;  % Total area [m²]
 
 %% === 2. SCS Curve Number Model Setup ===================================
-CN_per        = 90;     % Curve number (pervious)
-h0_w          = 0.01;   % Initial abstraction [m]
+CN_per        = 65;     % Curve number (pervious)
+h0_w          = 0.006;   % Initial abstraction [m]
 n_w           = 0.02;   % Manning's n [-]
-Aimp          = 0;      % Impervious fraction [-]
+Aimp          = 0.8;      % Impervious fraction [-]
 slope_w       = 0.015;  % Slope [m/m]
 baseflow_w    = 0;      % Baseflow [m³/s]
-ks_w          = 50;     % Saturated K [mm/h]
-kr_w          = 5;      % Recovery rate [mm/h]
+ks_w          = 10;     % Saturated K [mm/h]
+kr_w          = 2;      % Recovery rate [mm/h]
 A_GI          = 0;      % GI area ratio [-]
 CN_GI         = 65;     % GI Curve Number [-]
 catch_GI_imp  = 0;      % % of impervious areas draining to GI [-]
 
 %% === 3. Read Input Spreadsheet ==========================================
-input_table = readtable('Catchment_Forcing.xlsx');
+input_table = readtable(forcing_path);
 flag_manual_hydrograph = table2array(input_table(1,6));
+
+% DELETE this for other cases
+% flag_manual_hydrograph = 0;
 
 %% === 4. Run Hydrologic Model ============================================
 if ~flag_manual_hydrograph
     tfinal = table2array(input_table(end,1));  % in minutes
     [time_watershed, Qin, ~, ~, time_inflow_hydrograph, inflow_hydrograph_data] = ...
         SCS_Hydrologic_Model(dt, tfinal, width_w, length_w, CN_per, h0_w, ...
-        n_w, Aimp, slope_w, baseflow_w, ks_w, kr_w, A_GI, CN_GI, catch_GI_imp);
+        n_w, Aimp, slope_w, baseflow_w, ks_w, kr_w, A_GI, CN_GI, catch_GI_imp, forcing_path);
 
 elseif flag_manual_hydrograph 
     inflow_hydrograph_table = table2array(input_table(2:end, 1:4));
@@ -64,6 +67,8 @@ if flag_manual_hydrograph
     qin = inflow_hydrograph_data / 1000 / 3600;  % Already with the convention signal
 else 
     qin = -Qin' / LID_area;           % [m/s]
+    % Adding ETP
+    qin = qin + table2array(input_table(2:end-1,3))'/1000/3600; % [m/s]
 end
 
 %% === 6. Water Quality Model Parameters ===================================

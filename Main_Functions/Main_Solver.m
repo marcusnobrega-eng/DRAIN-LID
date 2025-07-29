@@ -25,11 +25,12 @@
 %
 % Author      : Marcus Nóbrega, Ph.D.
 % Updated     : May 2025
+
 %% =========================================================================
 
 % === ⏱ Initialization ====================================================
 t_end = params.Tmax;
-t     = 0;
+t = params.dt;
 tstep = 0;
 save_count = 0;
 save_index = 1;
@@ -37,7 +38,11 @@ q_prev = zeros(params.Nz + 1, 1);
 cumulative_net_flux_prev = 0;
 Q_orifice = 0;
 Q_spillway = 0;
-
+inflow_vol = 0;
+outflow_vol = 0;
+seepage_vol = 0;
+evaporation_vol = 0;
+infiltration_vol = 0;
 % === TIME LOOP ===========================================================
 while t <= t_end
 
@@ -49,8 +54,8 @@ while t <= t_end
 
 
     ponding_prev   = ponding_depth;
-    [top_val, bottom_val, ponding_depth] = get_boundary_values(h_old, params, t, ponding_prev);
-
+    [top_val, bottom_val, ponding_depth, top_bc_type_used] = get_boundary_values(h_old, params, t, ponding_prev, Delta, Gamma);
+    
     %% === 🔁 Newton-Raphson + Line Search ================================
     for adapt_attempt = 1:20
         converged = false;
@@ -71,8 +76,8 @@ while t <= t_end
             % === Combine total source term =================================
             source_term_value = source_term + source_drainage;
 
-            [F, q] = compute_residual(h_new, h_old, theta, theta_old, K, params, top_val, bottom_val, source_term_value); % Original Residual with Drainage from h
-            J      = compute_jacobian(h_new, h_old, params, top_val, bottom_val, source_term); % Here we must perturbate drainage inside
+            [F, q] = compute_residual(h_new, h_old, theta, theta_old, K, params, top_val, bottom_val, source_term_value, top_bc_type_used); % Original Residual with Drainage from h
+            J      = compute_jacobian(h_new, h_old, params, top_val, bottom_val, source_term, top_bc_type_used); % Here we must perturbate drainage inside
 
             delta = -(J \ F')';
 
@@ -101,9 +106,10 @@ while t <= t_end
                 % source_term_value = source_term + source_drainage;
 
                 % F_trial     = compute_residual(h_trial, h_old, theta_trial, theta_old, K_trial, params, top_val, bottom_val, source_term_value);
-                F_trial     = compute_residual(h_trial, h_old, theta_trial, theta_old, K_trial, params, top_val, bottom_val, source_term_value);
+                F_trial     = compute_residual(h_trial, h_old, theta_trial, theta_old, K_trial, params, top_val, bottom_val, source_term_value, top_bc_type_used);
 
-
+                
+                % Regular Line-Search Approach
                 if norm(F_trial) < (1 - eta * lambda) * res_norm_0
                     h_new = h_trial;
                     success = true;
@@ -118,9 +124,9 @@ while t <= t_end
 
             %% === ✅ Check Convergence + Mass Balance =====================
             print_error = 0;
-            [mb_error, ~, ~] = mass_balance_check( ...
-                h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, print_error);
-
+            [mb_error, ~, ~, current_storage] = mass_balance_check( ...
+                h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, top_bc_type_used, print_error);
+            
             mb_tol = 1e-3;  % Set mass balance tolerance [adjust as needed]
 
             if norm(delta) < params.tol && norm(F) < params.tol && abs(mb_error) < mb_tol
@@ -133,7 +139,7 @@ while t <= t_end
         if tstep > 1 & converged
             print_error = 1;
             [mb_error, mb_error_cumulative, cumulative_net_flux] = mass_balance_check( ...
-                h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, print_error);
+                h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, top_bc_type_used, print_error);
         else
             mb_error = 0;
             mb_error_cumulative = 0;
@@ -163,7 +169,17 @@ while t <= t_end
             tiledlayout(2, 2, 'TileSpacing','compact', 'Padding','compact');
         end
         clf;
-        plot_soil_profiles(h_new, h_old, params, t, tstep, @theta_vgm, @K_vgm, @compute_residual);
+        
+        % Add this block:
+        sim_percentage = 100 * t / params.Tmax;
+    
+        plot_soil_profiles(h_new, h_old, params, t, tstep, @theta_vgm, @K_vgm, q);
+    
+        % Set title on first tile
+        sgtitle(sprintf('Time = %.2f min — Step = %d — Simulation = %.2f days (%.1f%% Complete)', ...
+            t / 60, tstep, t / 86400, sim_percentage), ...
+            'FontSize', 12, 'FontWeight', 'bold', 'FontName', 'Helvetica');
+    
         drawnow;
         plot_index = plot_index + 1;
     end
@@ -173,6 +189,15 @@ while t <= t_end
     % drawnow;
     % pause(0.0001)
     %% === 💾 Save Outputs ===============================================
+
+    % Computing Current Inflow/Outflow Fluxes (For Free-Drainage and Neumann Only)
+    inflow_vol = -q(end) * params.dt + inflow_vol; % [m]
+    outflow_vol = -q(1) * params.dt + outflow_vol; % [m]
+    seepage_vol = -min(q(1), 0) * params.dt + seepage_vol; % [m]
+    infiltration_vol = -min(q(end), 0) * params.dt + infiltration_vol; % [m]
+    evaporation_vol = max(q(end), 0) * params.dt + evaporation_vol; % [m]
+    final_storage = current_storage;
+    
     current_save_time = params.save_interval * (save_count);
     if t >= current_save_time || tstep == 1
         save_count = save_count + 1;
@@ -180,14 +205,17 @@ while t <= t_end
         theta_now = theta_vgm(h_new, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
         K_now     = K_vgm(h_new, params.Ks, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
         [~, q_now] = compute_residual(h_new, h_old, theta_now, theta_now, K_now, ...
-            params, top_val, bottom_val, source_term);
+            params, top_val, bottom_val, source_term, top_bc_type_used);
 
         head_out(:, save_count)     = h_new(:);
         theta_out(:, save_count)    = theta_now(:);
         flux_out(:, save_count)     = q_now(:);
         ponding_series(save_count)  = ponding_depth;
         outlet_flux(save_count)     = q_now(1);
-        time_series(save_count)     = t;
+        time_series(save_count)     = t;        
+
+        % overall_mb_error = (inflow_vol - final_storage - outflow_vol)/inflow_vol*100
+
 
         if params.bottom_bc_type == "noflow"
             seepage_flux(save_count) = max(0, q_now(1));
@@ -202,8 +230,19 @@ while t <= t_end
         save_index = save_index + 1;
     end
 
+
+
     %% === ✅ Accept Time Step ===========================================
     h = h_new;
+
+    % === ⏳ Snap Time Step to Next Save Interval ============================
+    next_save_time = params.save_interval * save_count;
+
+    % Check if current step would overshoot the next save time
+    if t < next_save_time && (t + params.dt) > next_save_time
+        params.dt = next_save_time - t;  % Reduce dt to land exactly on save point
+    end
+
     t = t + params.dt;
     q_prev = q;
 end

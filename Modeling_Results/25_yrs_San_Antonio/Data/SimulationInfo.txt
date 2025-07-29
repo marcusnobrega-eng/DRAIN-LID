@@ -1,0 +1,32 @@
+============================================
+   MIXED-FORM RICHARDS SIMULATION SUMMARY
+============================================
+Simulation Name       : 25_yrs_San_Antonio
+Date                  : 19-May-2025 03:10:06
+
+--- Domain & Discretization ---
+Number of Nodes (Nz)  : 27
+Domain Depth (L) [m]  : 0.330
+Grid Refinement (n)   : 1.10
+
+--- Time Settings ---
+Initial Δt [s]        : 86400.00
+Min Δt [s]            : 0.00
+Max Δt [s]            : 86400.00
+Total Time [s]        : 788918400.00
+Save Interval [s]     : 86400.00
+Max Newton Iterations : 20
+
+--- Boundary Conditions ---
+Top BC Type           : neumann
+Top BC Value          : 0.000
+Bottom BC Type        : free
+Bottom BC Value       : 0.000
+
+--- Output Paths ---
+Base Folder           : Modeling_Results\25_yrs_San_Antonio
+Data Folder           : Modeling_Results\25_yrs_San_Antonio\Data
+Figures Folder        : Modeling_Results\25_yrs_San_Antonio\Figures
+
+--- Notes ---
+(Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)

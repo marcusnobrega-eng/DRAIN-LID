@@ -11,7 +11,7 @@
 % =========================================================================
 function [time_min, Q_total, H, infil_rate, inflow_t_min, inflow_q] = SCS_Hydrologic_Model( ...
 dt, duration_min, width, length, CN, h0, n_mann, Aimp, slope, baseflow, Ks, Kr, ...
-    A_GI, CN_GI, imp_drain_to_GI)
+    A_GI, CN_GI, imp_drain_to_GI, forcing_path)
 
 %% === 1. Basic Setup and Check ==========================================
 nsteps = duration_min * 60 / dt;    % Total number of time steps
@@ -24,13 +24,15 @@ if Aimp + A_GI > 1
 end
 
 %% === 2. Load Rainfall, ETP, and Optional Inflow ========================
-data = readtable('Catchment_Forcing.xlsx');
+data = readtable(forcing_path);
 
 rain = -table2array(data(2:end,2));           % [mm/h]
 etp  = +table2array(data(2:end,3));           % [mm/h]
 time_vec = table2array(data(2:end,1));       % [min]
 manual_flag = table2array(data(1,6));
 
+% DELETE
+manual_flag = 0;
 % Inflow Hydrograph (optional)
 if manual_flag == 1
     inflow_t_min = time_vec;
@@ -45,6 +47,12 @@ dt_rain = (time_vec(2) - time_vec(1));
 n_rain_steps = round(time_vec(end) / dt_rain);
 
 % Disaggregate Rainfall/ETP to Model dt
+if min(rain) < 0
+    rain = (-1) * rain; % Rain was entered as negative
+end
+if min(etp) < 0
+    etp = (-1) * etp; % Rain was entered as negative
+end
 rain_interp = interp1(time_vec, rain, linspace(0, time_vec(end), nsteps), 'previous')';
 etp_interp  = interp1(time_vec, etp,  linspace(0, time_vec(end), nsteps), 'previous')';
 
@@ -105,14 +113,17 @@ for i = 1:nsteps
 
     % --- Mass Balance for Water Depth ---
     qimp = rain_interp(i) / 1000 / 3600 * f_imp; % m/s
-    runoff = (1/n_mann) * width * slope^0.5 * max(H(i) - h0, 0)^(5/3);
+    runoff = (1/n_mann) * width * slope^0.5 * max(H(i) - h0, 0)^(5/3); % Pervious Areas Runoff [m3/s]
+    available_flow = H(i) / dt * A; % [m3/s]
+    runoff = min(runoff, available_flow); % [m3/s]
 
     dH = (rain_interp(i) - etp_interp(i) - f(i)) * dt / 3600 / 1000 ...
-        - runoff / A * f_per * dt ...
+        - runoff / A  * dt ...
         + qimp * dt + EffRain_GI(min(i,end)) * f_GI;
 
+
     if i < nsteps
-        H(i+1) = H(i) + dH;
+        H(i+1) = max(H(i) + dH,0); % Ensuring no negative ponding (ETP > ET)
     end
 
     Q(i) = runoff + baseflow;  % [m^3/s]

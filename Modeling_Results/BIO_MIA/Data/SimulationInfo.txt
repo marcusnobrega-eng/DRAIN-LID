@@ -1,0 +1,32 @@
+============================================
+   MIXED-FORM RICHARDS SIMULATION SUMMARY
+============================================
+Simulation Name       : BIO_MIA
+Date                  : 25-Jul-2025 13:57:46
+
+--- Domain & Discretization ---
+Number of Nodes (Nz)  : 27
+Domain Depth (L) [m]  : 0.900
+Grid Refinement (n)   : 1.10
+
+--- Time Settings ---
+Initial Δt [s]        : 675.00
+Min Δt [s]            : 0.00
+Max Δt [s]            : 86400.00
+Total Time [s]        : 946771200.00
+Save Interval [s]     : 86400.00
+Max Newton Iterations : 20
+
+--- Boundary Conditions ---
+Top BC Type           : neumann
+Top BC Value          : 0.000
+Bottom BC Type        : free
+Bottom BC Value       : 0.000
+
+--- Output Paths ---
+Base Folder           : Modeling_Results\BIO_MIA
+Data Folder           : Modeling_Results\BIO_MIA\Data
+Figures Folder        : Modeling_Results\BIO_MIA\Figures
+
+--- Notes ---
+(Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)

@@ -38,18 +38,19 @@
 % Outputs:
 %   mb_error              – Mass balance error (ΔS - Net Input) [m]
 %   mb_error_cumulative   – Updated cumulative mass error       [m]
-%   cumulative_net_flux   – Updated cumulative inflow            [m]
+%   cumulative_net_flux   – Updated cumulative inflow           [m]
+%   S_now_total           - Current storage                     [m]
 %
 % Author   : Marcus Nóbrega, Ph.D.
 % Updated  : May 2025
 %% =========================================================================
 
-function [mb_error, mb_error_cumulative, cumulative_net_flux] = ...
+function [mb_error, mb_error_cumulative, cumulative_net_flux_post, S_now_total] = ...
     mass_balance_check(h_old, h_new, ponding_prev, ponding_depth, ...
                        q_prev, q_now, t, dt, ...
                        mb_error_cumulative, params, cumulative_net_flux_prev, ...
                        Q_orifice_now, Q_spillway_now, ...
-                       Q_orifice_prev, Q_spillway_prev, print_error)
+                       Q_orifice_prev, Q_spillway_prev, top_bc_type_used, print_error)
 
     %% === 1. Compute θ at t and t+Δt =====================================
     theta_prev = theta_vgm(h_old, params.theta_r, params.theta_s, ...
@@ -69,12 +70,25 @@ function [mb_error, mb_error_cumulative, cumulative_net_flux] = ...
     q_top_now  = q_now(end);   q_bot_now  = q_now(1);
     q_top_prev = q_prev(end);  q_bot_prev = q_prev(1);
 
-    q_top_avg = 0.5 * (q_top_now + q_top_prev);
     q_bot_avg = 0.5 * (q_bot_now + q_bot_prev);
-
+   
+    % === 🌧️ Top Input: depends on BC type
+    if top_bc_type_used == "neumann"
+        q_top_avg = 0.5 * (q_top_now + q_top_prev);
+        net_top_input = -q_top_avg * dt;  % Neumann flux (into soil)
+    elseif top_bc_type_used == "dirichlet"
+        delta_ponding = ponding_depth - ponding_prev;
+        net_top_input = delta_ponding;  % Dirichlet → from ponding change
+    else
+        net_top_input = 0;
+    end
+    
     %% === 4. Compute Average Volumetric Source [m³/m³/s] =================
-    source_now = interp1(params.source_times, params.source_profile', t, 'linear', 'extrap')';
-    source_old = interp1(params.source_times, params.source_profile', t - dt, 'linear', 'extrap')';
+    % source_now = interp1(params.source_times, params.source_profile', t, 'linear', 'extrap')';
+    % source_old = interp1(params.source_times, params.source_profile', t - dt, 'linear', 'extrap')';
+    source_now = linear_interp(t, params.source_times, params.source_profile);
+    source_old = linear_interp(t - dt, params.source_times, params.source_profile);
+
     source_avg = 0.5 * (source_now + source_old);
 
     total_source = sum(source_avg .* params.dz(:)) * dt;  % [m]
@@ -90,8 +104,9 @@ function [mb_error, mb_error_cumulative, cumulative_net_flux] = ...
     total_sinks     = orifice_volume + spillway_volume;
 
     %% === 6. Compute Net Inflow [m] ======================================
-    net_input = (-q_top_avg + q_bot_avg) * dt + total_source - total_sinks;
-    cumulative_net_flux = cumulative_net_flux_prev + net_input;
+    % === Final Net Input
+    net_input = net_top_input + q_bot_avg * dt + total_source - total_sinks;
+    cumulative_net_flux_post = cumulative_net_flux_prev + net_input;
 
     %% === 7. Compute Storage Change [m] ==================================
     delta_storage = S_now_total - S_prev_total;
@@ -104,4 +119,19 @@ function [mb_error, mb_error_cumulative, cumulative_net_flux] = ...
     if abs(mb_error) > 1e-6 && print_error == 1
         fprintf('[t = %.2f min] ⚠️ Mass Balance Error: %.2e m³/m²\n', t / 60, mb_error);
     end
+end
+
+
+function v = linear_interp(tq, x, v)
+    % Find index i such that x(i) <= tq < x(i+1)
+    idx = find(x <= tq, 1, 'last');
+    if isempty(idx) || idx >= length(x)
+        idx = max(min(idx, length(x)-1), 1);  % Clamp
+    end
+    x0 = x(idx);
+    x1 = x(idx+1);
+    v0 = v(:,idx);
+    v1 = v(:,idx+1);
+    w = (tq - x0) / (x1 - x0);
+    v = v0 + w .* (v1 - v0);
 end

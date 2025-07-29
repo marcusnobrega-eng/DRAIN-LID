@@ -2,7 +2,7 @@
    MIXED-FORM RICHARDS SIMULATION SUMMARY
 ============================================
 Simulation Name       : Celia_1990
-Date                  : 13-May-2025 14:43:57
+Date                  : 16-May-2025 10:18:42
 
 --- Domain & Discretization ---
 Number of Nodes (Nz)  : 41

@@ -1,0 +1,32 @@
+============================================
+   MIXED-FORM RICHARDS SIMULATION SUMMARY
+============================================
+Simulation Name       : PP_Continuous
+Date                  : 28-Jul-2025 13:02:59
+
+--- Domain & Discretization ---
+Number of Nodes (Nz)  : 27
+Domain Depth (L) [m]  : 0.330
+Grid Refinement (n)   : 1.10
+
+--- Time Settings ---
+Initial Δt [s]        : 900.00
+Min Δt [s]            : 0.10
+Max Δt [s]            : 86400.00
+Total Time [s]        : 22677300.00
+Save Interval [s]     : 900.00
+Max Newton Iterations : 20
+
+--- Boundary Conditions ---
+Top BC Type           : neumann
+Top BC Value          : 0.000
+Bottom BC Type        : free
+Bottom BC Value       : 0.000
+
+--- Output Paths ---
+Base Folder           : Modeling_Results\PP_Continuous
+Data Folder           : Modeling_Results\PP_Continuous\Data
+Figures Folder        : Modeling_Results\PP_Continuous\Figures
+
+--- Notes ---
+(Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)

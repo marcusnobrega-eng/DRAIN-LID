@@ -45,7 +45,7 @@
 % Author   : Marcus Nóbrega, Ph.D.
 % Updated  : May 2025
 %% =========================================================================
-function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term_fixed)
+function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term_fixed, top_bc_type_used)
 
     %% === 1. Initialization ===============================================
     Nz     = params.Nz;
@@ -79,13 +79,14 @@ function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term
     source_term_value = source_term_fixed + source_drainage;
 
     F0 = compute_residual(h, h_old, theta_base, theta_old, K_base, ...
-                          params, top_val, bottom_val, source_term_value);
+                          params, top_val, bottom_val, source_term_value, top_bc_type_used);
 
     %% === 3. Loop Over Nodes to Build Jacobian ============================
     for j = 1:Nz
         h_pert       = h;
         h_pert(j)    = h(j) + eps_fd;
 
+       
         theta_pert = theta_vgm(h_pert, params.theta_r, params.theta_s, ...
                                           params.alpha, params.n, params.m);
 
@@ -104,7 +105,7 @@ function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term
         
         % % === Compute Perturbed Residual without drainage ==============
         F_pert = compute_residual(h_pert, h_old, theta_pert, theta_old, ...
-                                  K_pert, params, top_val, bottom_val, source_term_value); % Fixed source term
+                                  K_pert, params, top_val, bottom_val, source_term_value, top_bc_type_used); % Fixed source term
 
         % % Skip injection at BCs
         % if j ~= 1 && j ~= Nz
@@ -112,6 +113,7 @@ function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term
         % end
 
         J(:, j) = sparse((F_pert - F0) / eps_fd);  % Finite difference (without drainage)
+
 
         %% === 4. Enforce Analytical Derivatives at BC Nodes ===============
         % if j == 1
