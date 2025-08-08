@@ -36,6 +36,7 @@ use_datetime = true;  % Set to false to use elapsed time in hours
 % === 8. State Animations ================================================
 dt_days = 2/24;
 
+% --------------- Activate this if you want to plot annimations --------- %
 % if params.Tmax/86400 > dt_days
 % animate_profiles(...
 %     theta_out, head_out, flux_out, ...

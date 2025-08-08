@@ -175,10 +175,11 @@ while t <= t_end
     
         plot_soil_profiles(h_new, h_old, params, t, tstep, @theta_vgm, @K_vgm, q);
     
-        % Set title on first tile
+        % Set title on first tile 
         sgtitle(sprintf('Time = %.2f min — Step = %d — Simulation = %.2f days (%.1f%% Complete)', ...
             t / 60, tstep, t / 86400, sim_percentage), ...
-            'FontSize', 12, 'FontWeight', 'bold', 'FontName', 'Helvetica');
+            'FontSize', 12, 'FontWeight', 'bold', 'FontName', 'Helvetica', 'Interpreter', 'none');
+
     
         drawnow;
         plot_index = plot_index + 1;
@@ -246,3 +247,6 @@ while t <= t_end
     t = t + params.dt;
     q_prev = q;
 end
+
+%% ✅ Completion Message
+disp('✅ Simulation completed.');

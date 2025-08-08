@@ -1,5 +1,5 @@
 %% === 🗂️ User-defined Simulation Name and Output Paths ===================
-sim_name = 'Large_Bioretention';  % 📝 CHANGE THIS for each run
+sim_name = 'Generical_Example';  % 📝 CHANGE THIS for each run
 
 % Define subdirectories using sim_name
 base_output_dir   = fullfile('Modeling_Results', sim_name);
@@ -28,29 +28,29 @@ end
 params.Nz = 27;               % Number of vertical nodes [-]
 params.L  = 1.0;              % Total soil depth [m]
 nonlin_factor = 1;            % Grid refinement factor (1 = uniform)
-params.LID_area = 1000;       % 1D column area [m2]
+params.LID_area = 1;       % 1D column area [m2]
 
 % Generate refined mesh (Hydrus-style, refined near surface)
 [params.z, params.dz] = generate_nonlinear_mesh(params.Nz, params.L, nonlin_factor, mesh_dir);
 
 % === 2. TIME DISCRETIZATION ==============================================
 
-params.Tmax = 24*3600;        % Total simulation time [s]
-params.dt   = 5*60;           % Initial time step [s]
-params.dt_min = 0.01;           % Minimum dt [s]
-params.dt_max = 15*60;        % Maximum dt [s]
+params.Tmax = 24*3600;           % Total simulation time [s]
+params.dt   = 1;           % Initial time step [s]
+params.dt_min = 0.001;        % Minimum dt [s]
+params.dt_max = 5*60;         % Maximum dt [s]
 
 % Adaptive timestep control
 params.adapt_down = 0.5;      % Shrink factor
 params.adapt_up   = 2.0;      % Growth factor
-params.n_up       = 25;       % Threshold for fast convergence
-params.n_down     = 75;       % Threshold for slow convergence
+params.n_up       = 5;       % Threshold for fast convergence
+params.n_down     = 10;       % Threshold for slow convergence
 
-params.Nt = round(params.Tmax / params.dt);            % Max steps
-params.max_iters = 100;                                % Newton max iters
+params.Nt = round(params.Tmax / params.dt);           % Max steps
+params.max_iters = 20;                                % Newton max iters
 
 % Output saving frequency
-params.save_interval_min = 15;                         % [min]
+params.save_interval_min = 5;                         % [min]
 params.save_interval = max(params.save_interval_min * 60, params.dt); % [s]
 params.save_steps = round(0:params.save_interval / params.dt : params.Tmax / params.dt);
 n_save = length(params.save_steps);
@@ -66,31 +66,35 @@ save_count       = 0;
 mb_error_cumulative = 0;
 
 % Plotting time vector
-n_plots = 20;
+n_plots = 40;
 plot_times = linspace(0, params.Tmax, n_plots);
 plot_index = 1;
 
 % Pressure Limiter for Evaporation (Feddes)
-params.h_lim_upper = -0.1; % [m]
+params.h_lim_upper = -0.0; % [m]
 params.h_lim_down = -4; % [m]
 
-% === 3. MULTILAYER SOIL HYDRAULIC PROPERTIES =============================
+% === 3. MULTILAYER SOIL PROPERTIES ======================================
+media_thicknesses = [1];  % Bottom to top [m]
+% Be aware that to enter more layers, just add more values such that:
+% media_thicness = [1, 1, 2]; for 3 layers of 1, 1, and 2 meters
 
-% Define soil layer thicknesses [m], from bottom to top
-media_thicknesses = [0.3, 0.2, 0.1, 0.4];
-media_interfaces = [-params.L + cumsum(media_thicknesses)];
-media_interfaces = [-params.L, media_interfaces];  % Include bottom
-n_layers = length(media_thicknesses);
-
-% Van Genuchten + Ks parameters (per layer)
 media_props = struct( ...
-    'alpha',   [2.0, 2.0, 2.0, 2.0], ...
-    'n',       [1.5, 1.5, 1.5, 1.5], ...
-    'theta_r', [0.04, 0.04, 0.04, 0.04], ...
-    'theta_s', [0.42, 0.42, 0.42, 0.42], ...
-    'S_s',     [1e-4, 1e-4, 1e-4, 1e-4], ...
-    'Ks',      [5e-4, 5e-4, 5e-4, 5e-4] ...
-    );
+    'alpha',   [14.5], ...        % van Genuchten alpha (1/m)
+    'n',       [2.68], ...        % van Genuchten n
+    'theta_r', [0.045], ...       % Residual water content
+    'theta_s', [0.43], ...        % Saturated water content
+    'S_s',     [1e-5], ...        % Specific storage (1/m)
+    'Ks',      [8.25e-5]);        % Saturated hydraulic conductivity (m/s)
+
+% The same idea aplies to the parameters. Just augment it to include other
+% layers
+
+media_props.labels = {'Sand'}; % Add the name of the layers (for V.G plot)
+
+media_interfaces = [-params.L + cumsum(media_thicknesses)];
+media_interfaces = [-params.L, media_interfaces];
+n_layers = length(media_thicknesses);
 
 % Assign media index to each node
 media_id = zeros(1 , params.Nz);
@@ -132,7 +136,7 @@ params.tol = 1e-6; % [m]
 % === Top Boundary Condition Type =========================================
 % Options: 'dirichlet' = fixed pressure head; 'neumann' = flux
 params.top_bc_type  = "dirichlet";  % Options: 'dirichlet' or 'neumann'
-params.top_bc_value = 0.05;         % Pressure head at top [m] (set NaN for Neumann)
+params.top_bc_value = -0.1;         % Pressure head at top [m] (set NaN for Neumann)
 
 % === Bottom Boundary Condition Type ======================================
 % Options: 'dirichlet', 'neumann', 'free', or 'noflow'
@@ -154,7 +158,16 @@ params.bottom_bc_value = 0;         % [m] (ignored for 'free' and 'noflow')
 % bottom_flux_vals = 0 * surface_flux_vals;
 
 if params.top_bc_type == "neumann"
-    [surface_flux_time, surface_flux_vals, C_top] = Catchment_Outputs(params.dt , params.LID_area);  
+    % ---- Attention --- %
+    % Please, enter the forcing path of your catchment. Go to folder
+    % Forcing and see file Catchment_Forcing.xlsx. You can copy it, rename
+    % it, and enter your forcing data for your catchment. In addition, you
+    % need to specify the catchment dimensions, CN, and other parameters.
+    % Therefore, when running a case with catchment modeling, open the
+    % function Catchment_Outputs and configure the catchment properties
+    % inside it.
+    forcing_path = '.xlsx'; % Enter your forcing path here
+    [surface_flux_time, surface_flux_vals, C_top] = Catchment_Outputs(params.dt , params.LID_area, forcing_path);  
     params.surface_flux_time = surface_flux_time;      % Time vector for interpolation [s]
     params.surface_flux_vals = surface_flux_vals;      % Time-varying flux [m/s]
 else
@@ -176,7 +189,7 @@ params.exp_orifice   = 0.5 * ones(1, params.Nz);         % [-] Exponent (typical
 
 % Example: Add orifice at node 1 (10 cm diameter)
 node_idx = 20;                  % Vector indicating orifice nodes
-n_orifices = 1;                 % Vector indicating the number of orifices in a node
+n_orifices = 0;                 % Vector indicating the number of orifices in a node
 Cd       = 0.6;                 % Discharge coefficient [-] (0.5 - 0.6)
 D        = 0.10;                % Vector of orifice diameters [m]
 Aeff     = pi * D .^2 / 4;      % Effective area [m²]
@@ -212,7 +225,7 @@ params.source_times   = linspace(0, params.Tmax, params.Nt);
 params.source_profile = zeros(params.Nz, params.Nt);  % Fill as needed
 
 % Initial condition: hydrostatic profile
-p = 0;                        % Uniform suction [m]
+p = -3;                       % Uniform suction [m]
 h = p * ones(1, params.Nz);   % Default
 
 if params.bottom_bc_type == "dirichlet"

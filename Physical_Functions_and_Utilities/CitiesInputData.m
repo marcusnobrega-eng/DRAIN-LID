@@ -828,12 +828,12 @@ media_thicknesses = [0.10];  % Bottom to top
 
 % Testing
 media_props = struct( ...
-    'alpha',   [12.4], ...        % van Genuchten alpha (1/m)
-    'n',       [2.3], ...         % van Genuchten n
+    'alpha',   [12.4], ...           % van Genuchten alpha (1/m)
+    'n',       [2.3], ...            % van Genuchten n
     'theta_r', [0.057], ...          % Residual water content
-    'theta_s', [0.41], ...         % Saturated water content
-    'S_s',     [1e-5], ...               % Specific storage (1/m)
-    'Ks',      [4.05e-5]);            % Saturated hydraulic conductivity (m/s)
+    'theta_s', [0.41], ...           % Saturated water content
+    'S_s',     [1e-5], ...           % Specific storage (1/m)
+    'Ks',      [4.05e-5]);           % Saturated hydraulic conductivity (m/s)
 
 
 % GA CALIBRATED

@@ -1,0 +1,122 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 🌱 RICHARDS EQUATION SOLVER (1D Vertical) — MULTI-LAYER SOIL PROFILE
+%
+% Description:
+%   Solves the transient mixed-form Richards Equation for unsaturated flow
+%   in a variably saturated soil column with multiple soil types.
+%
+% Features:
+%   ✅ Nonlinear vertical grid refinement near the surface (Hydrus-style)
+%   ✅ Spatially variable soil hydraulic properties (Van Genuchten + Ks)
+%   ✅ Hydrostatic initial condition
+%   ✅ Dirichlet, Neumann, Free, and No-Flow boundary conditions
+%   ✅ Outputs pressure head, moisture, and bottom fluxes over time
+%
+% Developed by: Marcus Nobrega, Ph.D. 🌎
+% Last Updated: May 2025
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% =========================================================================
+% 🌱 MAIN RICHARDS MODEL LAUNCHER
+% Description:
+%   Master script to run the 1D mixed-form Richards equation solver using
+%   modular configuration, numerical engine, and post-processing routines.
+%
+% Folders:
+%   📁 Model_Configuration/           – Input setup and parameter loading
+%   📁 Numerical_Solver/              – Time loop, Newton method, residuals
+%   📁 Physical_Functions_and_Utilities/ – Soil functions, mesh, BCs
+%   📁 Visualization_and_Output/      – Plotting and result export
+%   📁 Examples/                      – .mat files with benchmark setups
+%   📁 Modeling_Results/              – Output figures, logs, saved results
+%
+% Author   : Marcus Nóbrega, Ph.D.
+% Updated  : May 2025
+%% =========================================================================
+
+clearvars; close all; clc;
+
+%% === Add Relevant Paths ==================================================
+addpath('Model_Configurations');               % Input setup & parameters
+addpath('Numerical_Solver');                   % Solver and residual logic
+addpath('Physical_Functions_and_Utilities');   % Mesh, θ-K, BC utilities
+addpath('Main_Functions');                     % Main Solvers
+addpath('Visualization_and_Output');           % Plotting, exports
+addpath('Model_Calibration');                  % Files for model calibration
+addpath('Forcing');                            % Catchment hydrologic functions
+addpath('Examples');                           % Examples pre-defined
+
+%% =========================================================================
+% 📂 LOAD SCENARIO
+% You can simply load a (pre-generated) workspace with all inputs already
+% configured. If you do so, please uncomment 
+% =========================================================================
+% Option 1: Load parameters from a saved .mat file
+% load('Examples/Celia1990.mat');
+% load('Examples/Example1_Infiltration_Sand.mat');
+% load('Examples/Example2_Clay_Loam_Soil.mat');
+% load('Examples/Example3_CapillaryRise.mat');
+% load('Examples/Example4_TopNeumann_Sandy.mat');
+% load('Examples/Example4_TopNeumann_Sandy.mat');
+% load('Examples/Monitored_PP_Data.mat');
+% load('Examples/Monitored_PP_Events_Data.mat');
+
+
+% Option 2: Run Cities Scenarios
+% Run Cities Scenario
+
+% Option 3: Run a particular scenario
+% PP
+% load('Examples/PP_NWC.mat'); % 
+% load('Examples/PP_MIA.mat');
+% load('Examples/PP_PHX.mat');
+% load('Examples/PP_SAN.mat');
+
+%
+% Bioretention
+% load('Examples/BIO_NWC.mat'); % 
+% load('Examples/BIO_MIA.mat'); % 
+% load('Examples/BIO_PHX.mat'); % checked
+% load('Examples/BIO_SAN.mat'); % 
+
+% Green-Roof
+% load('Examples/GR_NWC.mat'); 
+% load('Examples/GR_MIA.mat'); 
+% load('Examples/GR_PHX.mat'); 
+% load('Examples/GR_SAN.mat'); 
+
+% Pre-development Cases
+% load('Examples/PRE_NWC.mat'); 
+% load('Examples/PRE_MIA.mat'); 
+% load('Examples/PRE_PHX.mat'); 
+% load('Examples/PRE_SAN.mat'); 
+
+
+% Option 4: Run input script to generate fresh config
+% Open the file Input_Data and configure your case in there. Please read
+% carefully all input data required
+
+run('Input_Data.m');  % Default configurable script
+
+disp('📦 Input parameters loaded.');
+
+%% === Execute Solver ======================================================
+% Date Begin (YYYY, Month, Day, Hours, Minutes, Seconds)
+% This date will be used in plotting the model output time-series
+start_datetime = datetime(2023, 12, 21, 0, 10, 0); 
+
+% Empirical Evaporation/Evapotranspiration Coefficeints (see paper draft
+% for reference)
+
+Delta = 1; % 0.3 for permeable pavements, 1 otherwise
+Gamma = 0; % 2 for permeable pavements, 0 otherwise
+
+run('Main_Solver.m');
+
+disp('✅ Simulation completed.');
+
+%% === Save Results ========================================================
+SaveSimulationResults
+
+%% === Run Post-Processing Visualization ===================================
+Post_Processing;
