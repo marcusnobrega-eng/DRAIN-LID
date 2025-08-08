@@ -1,14 +1,16 @@
-# 🌧️ DRAIN-GI: Darcy–Richards Analysis of Infiltration in Nature-based Low Impact Development
+# 🌧️ DRAIN-LID: Darcy–Richards Analysis of Infiltration in Nature-based Low Impact Development
 
 A MATLAB-based hydrological modeling framework for simulating infiltration, evaporation, and drainage in green infrastructure systems such as permeable pavements, green roofs, and bioretention cells.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
+<img width="1987" height="861" alt="Picture1" src="https://github.com/user-attachments/assets/347a5d4a-103c-4ecd-8564-8fb243b0f7ac" />
+
 ---
 
 ## 📘 Project Summary
 
-**DRAIN-GI** is a modular, mass-conservative, and high-resolution hydrological model that solves the **1D mixed-form Richards equation** to simulate **vertical water movement** in variably saturated soils. It is designed for system-level analysis of **nature-based Low Impact Development (LID)** systems under real-world climatic and hydrological conditions.
+**DRAIN-LID** is a modular, mass-conservative, and high-resolution hydrological model that solves the **1D mixed-form Richards equation** to simulate **vertical water movement** in variably saturated soils. It is designed for system-level analysis of **nature-based Low Impact Development (LID)** systems under real-world climatic and hydrological conditions.
 
 The model couples **infiltration modeling**, **surface fluxes**, **evaporation and evapotranspiration**, and **engineered drainage infrastructure** into a unified and extensible MATLAB-based platform.
 
@@ -40,7 +42,7 @@ The model couples **infiltration modeling**, **surface fluxes**, **evaporation a
 ## 📁 Directory Structure
 
 ```bash
-📦 DRAIN-GI/
+📦 DRAIN-LID/
 ├── Main_Function/               # Main solver and time integration loop
 ├── Numerical_Solver/           # Residual, Jacobian, and Newton solver functions
 ├── Physical_Functions_And_Utilities/
@@ -52,7 +54,7 @@ The model couples **infiltration modeling**, **surface fluxes**, **evaporation a
 ├── Visualization_And_Output/  # Plots, animations, diagnostics
 ├── Docs/                       # Technical Manual and Scientific Paper Draft (currently under review)
 └── README.md
-
+```
 ## 📚 Documentation
 A full user manual is included (Docs/Manual_DRAIN_GI.pdf), covering:
 
@@ -77,7 +79,7 @@ A full user manual is included (Docs/Manual_DRAIN_GI.pdf), covering:
 ├── Figures/Plots/*.png 
 ├── Figures/Animations/*.mp4
 ├── Log.txt
-
+```
 ## Key outputs:
 ⬇️ Time series of pressure head ($h$), water content ($\theta$), and flux ($q$)
 
