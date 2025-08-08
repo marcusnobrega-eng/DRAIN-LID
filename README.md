@@ -38,6 +38,7 @@ The model couples **infiltration modeling**, **surface fluxes**, **evaporation a
 ---
 
 ## 📁 Directory Structure
+
 ```bash
 📦 DRAIN-GI/
 ├── Main_Function/               # Main solver and time integration loop
@@ -70,6 +71,7 @@ A full user manual is included (Docs/Manual_DRAIN_GI.pdf), covering:
 💡 Common issues and troubleshooting
 
 ## Results_<Scenario>/
+
 ```bash
 ├── Data/SimulationResults.xlsx (Excel spreadsheet with all model states and outputs for all nodes in the domain)
 ├── Figures/Plots/*.png 
