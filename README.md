@@ -102,6 +102,7 @@ A full user manual is included (Docs/Manual_DRAIN_GI.pdf), covering:
 
 Several other examples are available in the \Examples folder. To run a particular example, please just load the scenario in the main code function.
 
+Full mathematical documentation of the model is available in the folder \Doc.
 
 👤 Developer
 **Marcus N. Gomes Jr.**  
