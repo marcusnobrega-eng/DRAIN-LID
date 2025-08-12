@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil &#8212; DRAIN-LID 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=0ca6144b" />
+    <script src="../_static/documentation_options.js?v=7026087e"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example 05 — Observed Permeable Pavement (255 days)" href="example05.html" />
+    <link rel="prev" title="Example 03 — Capillary Rise from a Water Table" href="example03.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="example-04-constant-rainfall-neumann-1-m-day-in-sandy-soil">
+<span id="example04"></span><h1>Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil<a class="headerlink" href="#example-04-constant-rainfall-neumann-1-m-day-in-sandy-soil" title="Link to this heading">¶</a></h1>
+<section id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h2>
+<p>Evaluate the model under a <strong>constant downward surface flux</strong> of <strong>1 m/day</strong>
+into a dry <strong>sandy</strong> profile. This is a high-conductivity case with <strong>no surface
+ponding</strong>. Results are compared against HYDRUS-1D.</p>
+</section>
+<section id="how-to-run">
+<h2>How to run<a class="headerlink" href="#how-to-run" title="Link to this heading">¶</a></h2>
+<p>Uncomment <strong>exactly one</strong> line in <code class="docutils literal notranslate"><span class="pre">Mixed_Richards_Model_1D.m</span></code>:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% load(&#39;Examples/Example1_Infiltration_Sand.mat&#39;);</span>
+<span class="c">% load(&#39;Examples/Example2_Clay_Loam_Soil.mat&#39;);</span>
+<span class="c">% load(&#39;Examples/Example3_CapillaryRise.mat&#39;);</span>
+<span class="nb">load</span><span class="p">(</span><span class="s">&#39;Examples/Example4_TopNeumann_Sandy.mat&#39;</span><span class="p">);</span><span class="w">   </span><span class="c">% ← enable this</span>
+</pre></div>
+</div>
+<p>Press <strong>Run</strong> (F5). Outputs are written to <code class="docutils literal notranslate"><span class="pre">Modeling_Results/&lt;sim_name&gt;/</span></code> (Figures, Data, Log.txt).</p>
+</section>
+<section id="setup-summary">
+<h2>Setup (summary)<a class="headerlink" href="#setup-summary" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Same inputs as Example 01</strong> (sandy soil, column depth, mesh), <strong>except</strong> the top BC.</p></li>
+<li><p><strong>Top boundary:</strong> <strong>Neumann</strong> constant flux
+<span class="math notranslate nohighlight">\(q_{\text{top}} = 1\,\mathrm{m\,day^{-1}} \approx 1.1574\times10^{-5}\,\mathrm{m\,s^{-1}}\)</span>
+(negative = downward).</p></li>
+<li><p><strong>Bottom boundary:</strong> <strong>free drainage</strong> (<span class="math notranslate nohighlight">\(\partial h/\partial z=0\)</span>).</p></li>
+<li><p><strong>Evaporation/ET:</strong> disabled.</p></li>
+<li><p><strong>Initial condition:</strong> dry suction (as in Example 01).</p></li>
+</ul>
+</section>
+<section id="what-to-expect">
+<h2>What to expect<a class="headerlink" href="#what-to-expect" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>A rapid, sharp <strong>wetting front</strong> propagating downward; <strong>no ponding</strong> at the surface.</p></li>
+<li><p><strong>Good agreement</strong> with HYDRUS-1D in both pressure head <span class="math notranslate nohighlight">\(h(z,t)\)</span> and moisture
+<span class="math notranslate nohighlight">\(\theta(z,t)\)</span>; <strong>low RMSE</strong> for most of the simulation.</p></li>
+<li><p>Slight differences may appear near the surface and the advancing front at later times
+(boundary handling, mesh discretization).</p></li>
+</ul>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Profiles</strong>: <span class="math notranslate nohighlight">\(h(z,t)\)</span>, <span class="math notranslate nohighlight">\(\theta(z,t)\)</span>, <span class="math notranslate nohighlight">\(q(z,t)\)</span> saved under <code class="docutils literal notranslate"><span class="pre">Figures/Profiles</span></code>.</p></li>
+<li><p><strong>Time series</strong>: surface flux (rain/zero), bottom seepage, storage change, and mass-balance in
+<code class="docutils literal notranslate"><span class="pre">Figures/TimeSeries</span></code>; CSV/MAT in <code class="docutils literal notranslate"><span class="pre">Data</span></code>; run details in <code class="docutils literal notranslate"><span class="pre">Log.txt</span></code>.</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Back to <a class="reference internal" href="index.html"><span class="doc">Examples index</span></a></p></li>
+<li><p><a class="reference internal" href="example01.html"><span class="doc">Example 01 — Infiltration into Sandy Soil (Dirichlet head)</span></a> (same soil/geometry with Dirichlet top)</p></li>
+<li><p><a class="reference internal" href="../userguide/index.html"><span class="doc">Preparing your input data</span></a></p></li>
+</ul>
+<figure class="align-center" id="id1">
+<span id="fig-ex04-compare"></span><a class="reference internal image-reference" href="../_images/example04.png"><img alt="Example 04: Comparison of DRAIN-LID and HYDRUS-1D under constant 1 m/day rainfall" src="../_images/example04.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><strong>Example 04</strong> — RMSE of head (top-left) and moisture (bottom-left) over time; right panels show
+profile comparisons at 10 %, 25 %, 50 %, 75 %, and 100 % of the run. Solid = HYDRUS-1D, dotted = DRAIN-LID.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">DRAIN-LID</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Navigation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/index.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">Preparing your input data</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example01.html">Example 01 — Infiltration into Sandy Soil (Dirichlet head)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example02.html">Example 02 — Infiltration &amp; Redistribution in Clay-Loam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example03.html">Example 03 — Capillary Rise from a Water Table</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example05.html">Example 05 — Observed Permeable Pavement (255 days)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../paper/index.html">Paper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/acknowledgments.html">Acknowledgments</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="example03.html" title="previous chapter">Example 03 — Capillary Rise from a Water Table</a></li>
+      <li>Next: <a href="example05.html" title="next chapter">Example 05 — Observed Permeable Pavement (255 days)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Gomes Jr..
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/examples/example04.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

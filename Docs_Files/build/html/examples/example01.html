@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Example 01 — Infiltration into Sandy Soil (Dirichlet head) &#8212; DRAIN-LID 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=0ca6144b" />
+    <script src="../_static/documentation_options.js?v=7026087e"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example 02 — Infiltration &amp; Redistribution in Clay-Loam" href="example02.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="example-01-infiltration-into-sandy-soil-dirichlet-head">
+<span id="example01"></span><h1>Example 01 — Infiltration into Sandy Soil (Dirichlet head)<a class="headerlink" href="#example-01-infiltration-into-sandy-soil-dirichlet-head" title="Link to this heading">¶</a></h1>
+<section id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h2>
+<p>Demonstrate a sharp wetting front produced by constant <strong>pressure head</strong> infiltration
+into a dry <strong>sand</strong> column and compare against HYDRUS-1D.</p>
+</section>
+<section id="how-to-run">
+<h2>How to run<a class="headerlink" href="#how-to-run" title="Link to this heading">¶</a></h2>
+<p>Uncomment the line below in <code class="docutils literal notranslate"><span class="pre">Mixed_Richards_Model_1D.m</span></code> and run the script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;Examples/Celia1990.mat&#39;</span><span class="p">);</span>
+<span class="n">load</span><span class="p">(</span><span class="s1">&#39;Examples/Example1_Infiltration_Sand.mat&#39;</span><span class="p">);</span>
+<span class="o">%</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;Examples/Example2_Clay_Loam_Soil.mat&#39;</span><span class="p">);</span>
+<span class="o">%</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="scenario-at-a-glance">
+<h2>Scenario at-a-glance<a class="headerlink" href="#scenario-at-a-glance" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Column depth: <span class="math notranslate nohighlight">\(L = 1.0\)</span> m; nodes: <span class="math notranslate nohighlight">\(N_z = 41\)</span> (uniform). :contentReference[oaicite:1]{index=1}</p></li>
+<li><p>Time setup: total time <span class="math notranslate nohighlight">\(T_{\max}=3600\)</span> s (1 h); initial <span class="math notranslate nohighlight">\(\Delta t=1\)</span> s; save every 60 s.</p></li>
+<li><p>Soil (USDA sand): <span class="math notranslate nohighlight">\(\theta_r=0.045\)</span>, <span class="math notranslate nohighlight">\(\theta_s=0.430\)</span>, <span class="math notranslate nohighlight">\(\alpha=14.5\,\text{m}^{-1}\)</span>, <span class="math notranslate nohighlight">\(n=2.68\)</span>, <span class="math notranslate nohighlight">\(K_s=8.25\times10^{-5}\,\text{m s}^{-1}\)</span>, <span class="math notranslate nohighlight">\(S_s=10^{-5}\,\text{m}^{-1}\)</span>.</p></li>
+<li><p>Initial condition: hydrostatic (dry near surface).</p></li>
+<li><p>Boundary conditions:
+- <strong>Top</strong>: Dirichlet (fixed head) <span class="math notranslate nohighlight">\(h_\text{top}=0\)</span> m.
+- <strong>Bottom</strong>: free drainage, <span class="math notranslate nohighlight">\(\partial h/\partial z = 0\)</span>.</p></li>
+<li><p>No drainage structures or internal sinks are active.</p></li>
+</ul>
+</section>
+<section id="what-to-expect">
+<h2>What to expect<a class="headerlink" href="#what-to-expect" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>A sharp wetting front initiates at the surface and propagates downward rapidly;
+no surface ponding is expected for this sandy profile. :</p></li>
+<li><p>Agreement with HYDRUS-1D is strong for both <span class="math notranslate nohighlight">\(h(z,t)\)</span> and <span class="math notranslate nohighlight">\(\theta(z,t)\)</span> (low RMSE),
+with small deviations mainly at very early/late times near the surface.</p></li>
+<li><p>The manual includes comparison plots (RMSE and profiles) for this case.</p></li>
+</ul>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>Running this example will save time series and vertical profiles (head, water content, flux)
+and summary figures into the scenario’s output folders (see <em>Output and Diagnostics</em> for
+file layout).</p>
+<figure class="align-center" id="id1">
+<span id="fig-ex01-wetting-front"></span><a class="reference internal image-reference" href="../_images/example01.png"><img alt="Wetting-front advance in sandy soil for Example 01" src="../_images/example01.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Wetting-front advance in <strong>Example 01</strong> (sandy soil). Profiles of <span class="math notranslate nohighlight">\(h(z,t)\)</span> and <span class="math notranslate nohighlight">\(\theta(z,t)\)</span>
+show a sharp, downward-moving front. See <a class="reference internal" href="#example01"><span class="std std-ref">Example 01 — Infiltration into Sandy Soil (Dirichlet head)</span></a> for setup.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">DRAIN-LID</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Navigation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/index.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">Preparing your input data</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example 01 — Infiltration into Sandy Soil (Dirichlet head)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example02.html">Example 02 — Infiltration &amp; Redistribution in Clay-Loam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example03.html">Example 03 — Capillary Rise from a Water Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example04.html">Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example05.html">Example 05 — Observed Permeable Pavement (255 days)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../paper/index.html">Paper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/acknowledgments.html">Acknowledgments</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Examples</a></li>
+      <li>Next: <a href="example02.html" title="next chapter">Example 02 — Infiltration &amp; Redistribution in Clay-Loam</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Gomes Jr..
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/examples/example01.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
