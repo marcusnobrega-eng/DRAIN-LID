@@ -1,0 +1,4 @@
+# Sphinx docs build
+sphinx==8.2.3
+alabaster==0.7.16
+m2r2==0.3.3
