@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Example 05 — Observed Permeable Pavement (255 days) &#8212; DRAIN-LID 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=0ca6144b" />
+    <script src="../_static/documentation_options.js?v=7026087e"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Paper" href="../paper/index.html" />
+    <link rel="prev" title="Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil" href="example04.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="example-05-observed-permeable-pavement-255-days">
+<span id="example05"></span><h1>Example 05 — Observed Permeable Pavement (255 days)<a class="headerlink" href="#example-05-observed-permeable-pavement-255-days" title="Link to this heading">¶</a></h1>
+<section id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h2>
+<p>Simulate an <strong>observed permeable pavement</strong> column continuously for <strong>255 days</strong> and
+analyze time series of <strong>pressure head</strong> <span class="math notranslate nohighlight">\(h\)</span>, <strong>water content</strong> <span class="math notranslate nohighlight">\(\theta\)</span>,
+and <strong>Darcy flux</strong> <span class="math notranslate nohighlight">\(q\)</span>. This example uses monitored rainfall/ET forcing and
+site-specific layer parameters included in the workspace.</p>
+</section>
+<section id="how-to-run">
+<h2>How to run<a class="headerlink" href="#how-to-run" title="Link to this heading">¶</a></h2>
+<p>Uncomment <strong>exactly one</strong> line in <code class="docutils literal notranslate"><span class="pre">Mixed_Richards_Model_1D.m</span></code>:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% load(&#39;Examples/Example4_TopNeumann_Sandy.mat&#39;);</span>
+<span class="nb">load</span><span class="p">(</span><span class="s">&#39;Examples/Monitored_PP_Data.mat&#39;</span><span class="p">);</span><span class="w">       </span><span class="c">% ← enable this</span>
+<span class="c">% load(&#39;Examples/Monitored_PP_Events_Data.mat&#39;);</span>
+</pre></div>
+</div>
+<p>Press <strong>Run</strong> (F5). Outputs are written to <code class="docutils literal notranslate"><span class="pre">Modeling_Results/&lt;sim_name&gt;/</span></code> (Figures, Data, Log.txt).</p>
+</section>
+<section id="setup-summary">
+<h2>Setup (summary)<a class="headerlink" href="#setup-summary" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Duration</strong>: ~255 days (continuous, variable rain/ET).</p></li>
+<li><p><strong>Top boundary</strong>: <strong>Neumann</strong> (observed rain/ET forcing).
+The example workspace provides the time series already converted for the solver; if you
+switch to your own data, keep spreadsheet inputs in <strong>mm/h</strong> and convert to <strong>m/s</strong>
+upstream (see User Guide → Boundary conditions).</p></li>
+<li><p><strong>Bottom boundary</strong>: typically <strong>free drainage</strong> (<span class="math notranslate nohighlight">\(\partial h/\partial z = 0\)</span>) unless
+otherwise specified in the workspace.</p></li>
+<li><p><strong>Layers</strong>: pavement system (e.g., surface + base/subbase), with van Genuchten–Mualem
+parameters (<span class="math notranslate nohighlight">\(\theta_r,\theta_s,\alpha,n,\ell,K_s\)</span>) and <strong>specific storage</strong> <span class="math notranslate nohighlight">\(S_s\)</span>
+set in the workspace.</p></li>
+<li><p><strong>Evaporation</strong>: Hargreaves <span class="math notranslate nohighlight">\(ET_0\)</span> with Feddes reduction; pavement option
+<span class="math notranslate nohighlight">\(E_0=\gamma(ET_0+\delta)\)</span> may be enabled (see run log).</p></li>
+<li><p><strong>Structures (optional)</strong>: spillway/orifice disabled by default unless enabled in the workspace.</p></li>
+</ul>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Time series</strong> (<code class="docutils literal notranslate"><span class="pre">Figures/TimeSeries</span></code>):
+- Top flux components (rain, ET), <strong>net surface flux</strong>, <strong>ponding depth</strong> (if any), <strong>runoff</strong> (if enabled)
+- <strong>Seepage</strong> at the bottom, storage change, cumulative <strong>mass balance</strong></p></li>
+<li><p><strong>Profiles</strong> (<code class="docutils literal notranslate"><span class="pre">Figures/Profiles</span></code>): <span class="math notranslate nohighlight">\(h(z,t)\)</span>, <span class="math notranslate nohighlight">\(\theta(z,t)\)</span>, <span class="math notranslate nohighlight">\(q(z,t)\)</span> at selected dates</p></li>
+<li><p><strong>Data</strong> (<code class="docutils literal notranslate"><span class="pre">Data/</span></code>): CSV/MAT exports of the variables above</p></li>
+<li><p><strong>Log</strong> (<code class="docutils literal notranslate"><span class="pre">Log.txt</span></code>): mesh, layers/BCs, solver tolerances, mass-balance summary</p></li>
+</ul>
+</section>
+<section id="notes-tips">
+<h2>Notes &amp; tips<a class="headerlink" href="#notes-tips" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Performance for long runs</strong>: consider coarser save cadence (e.g., hourly) to keep figure/data
+counts manageable; this is usually pre-configured in the workspace.</p></li>
+<li><p><strong>Units</strong>: spreadsheet inputs (if you swap them) should be <strong>mm/h</strong>; solver uses <strong>m/s</strong>.</p></li>
+<li><p><strong>Pavement evaporation</strong>: if <span class="math notranslate nohighlight">\(E_0=\gamma(ET_0+\delta)\)</span> is active, confirm the chosen
+<span class="math notranslate nohighlight">\(\gamma\)</span> and <span class="math notranslate nohighlight">\(\delta\)</span> in your workspace match the site calibration.</p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><em>No surface response during storms</em>: verify top BC is <strong>Neumann</strong> and the forcing series
+is nonzero (and correctly converted to m/s).</p></li>
+<li><p><em>Slow convergence in wet periods</em>: reduce initial <code class="docutils literal notranslate"><span class="pre">params.dt</span></code> or increase <code class="docutils literal notranslate"><span class="pre">params.max_iters</span></code>;
+check layer <span class="math notranslate nohighlight">\(K_s\)</span> and retention parameters.</p></li>
+<li><p><em>Large mass-balance error</em>: inspect the time step control (tighten tolerances or reduce
+<code class="docutils literal notranslate"><span class="pre">dt_max</span></code> during heavy events).</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Back to <a class="reference internal" href="index.html"><span class="doc">Examples index</span></a></p></li>
+<li><p><a class="reference internal" href="../userguide/index.html"><span class="doc">Preparing your input data</span></a></p></li>
+<li><p><a class="reference internal" href="#"><span class="doc">Example 05 — Observed Permeable Pavement (255 days)</span></a> (constant-flux Neumann benchmark)</p></li>
+</ul>
+<figure class="align-center" id="id1">
+<span id="fig-ex05-timeseries"></span><a class="reference internal image-reference" href="../_images/example05.png"><img alt="Example 05: Permeable pavement—time series of head, θ, and q over 255 days" src="../_images/example05.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><strong>Example 05</strong> — Observed PP over 255 days. Example time series of surface forcing, ponding/runoff,
+and profiles/flux summaries. Replace with your generated figure saved at
+<code class="docutils literal notranslate"><span class="pre">_static/examples/TimeSeries/ex05_pp_timeseries.png</span></code>.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">DRAIN-LID</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Navigation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/index.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguide/index.html">Preparing your input data</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example01.html">Example 01 — Infiltration into Sandy Soil (Dirichlet head)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example02.html">Example 02 — Infiltration &amp; Redistribution in Clay-Loam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example03.html">Example 03 — Capillary Rise from a Water Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example04.html">Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example 05 — Observed Permeable Pavement (255 days)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../paper/index.html">Paper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/acknowledgments.html">Acknowledgments</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="example04.html" title="previous chapter">Example 04 — Constant Rainfall (Neumann 1 m/day) in Sandy Soil</a></li>
+      <li>Next: <a href="../paper/index.html" title="next chapter">Paper</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Gomes Jr..
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/examples/example05.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -14,38 +14,44 @@
 #
 import os
 import sys
-import dorado as pr
 
 # add path to repo-head
 sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'dorado'
-copyright = '2020, J. Hariharan, K. Wright, P. Passalacqua'
-author = 'J. Hariharan, K. Wright, P. Passalacqua'
+project = 'DRAIN-LID'
+copyright = '2025, Gomes Jr.'
+author = 'M. N. Gomes Jr.'
 
 # release/version , including alpha/beta/rc tags
-version = pr.__version__
-release = pr.__version__
+version = "0.1"
+release = "0.0.0"
 
 # -- General configuration ---------------------------------------------------
+
+# Add latex-style 
+mathjax3_config = {
+    'tex': {'inlineMath': [['$', '$'], ['\\(', '\\)']]}
+}
+
+html_theme = 'alabaster'
+
+html_theme_options = {
+    # Wider page + (optionally) a slightly wider sidebar
+    'page_width': '1200px',    # try 1100–1300px to taste
+    'sidebar_width': '300px',  # default ~220px; adjust if you like
+}
+
+
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.doctest',
-              'sphinx.ext.autosummary',
-              'sphinx.ext.napoleon',
-              'sphinx.ext.graphviz',
-              'sphinx.ext.mathjax',
-              'sphinx.ext.githubpages',
-              'matplotlib.sphinxext.plot_directive',
-              'sphinx.ext.viewcode',
-              'm2r2',
-              'IPython.sphinxext.ipython_console_highlighting',
-              'IPython.sphinxext.ipython_directive']
+extensions = [
+    'sphinx.ext.mathjax',
+    'm2r2'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -61,7 +67,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -103,7 +109,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'doradodoc'
+htmlhelp_basename = 'drainlid_doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -130,8 +136,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dorado.tex', u'dorado Documentation',
-     u'J. Hariharan', 'manual'),
+    ("index", "drainlid.tex", "DRAIN-LID Documentation",
+     "M. N. Gomes Jr.", "manual"),
 ]
 
 
@@ -140,10 +146,9 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'dorado', u'dorado Documentation',
+    ("index", "drainlid", "DRAIN-LID Documentation",
      [author], 1)
 ]
-
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -151,9 +156,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'dorado', u'dorado Documentation',
-     author, 'dorado', 'One line description of project.',
-     'Miscellaneous'),
+    ("index", "drainlid", "DRAIN-LID Documentation",
+     author, "drainlid", "One-dimensional mixed-form Richards solver for LID.",
+     "Miscellaneous"),
 ]
 
 
@@ -176,24 +181,22 @@ epub_exclude_files = ['search.html']
 
 
 # Autosummary / Automodapi settings
-autosummary_generate = True
-automodapi_inheritance_diagram = False
-autodoc_default_flags = ['members']
+# autosummary_generate = True
+# automodapi_inheritance_diagram = False
+# autodoc_default_flags = ['members']
 
 # doctest
-doctest_global_setup = '''
-import dorado
-import numpy as np
-from matplotlib import pyplot as plt
-'''
+# doctest_global_setup = '''
+# import numpy as np
+# from matplotlib import pyplot as plt
+# '''
 doctest_test_doctest_blocks = ''  # empty string disables testing all code in any docstring
 
 ## mpl plots
-plot_basedir = 'pyplots'
-plot_html_show_source_link = False
-plot_formats = ['png', ('hires.png', 300)]
-plot_pre_code = '''
-import numpy as np
-from matplotlib import pyplot as plt
-import dorado
-'''
+# plot_basedir = 'pyplots'
+# plot_html_show_source_link = False
+# plot_formats = ['png', ('hires.png', 300)]
+# plot_pre_code = '''
+# import numpy as np
+# from matplotlib import pyplot as plt
+# '''

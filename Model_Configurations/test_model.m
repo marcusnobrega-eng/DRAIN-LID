@@ -13,7 +13,7 @@
 %   ✅ Outputs pressure head, moisture, and bottom fluxes over time
 %
 % Developed by: Marcus Nobrega, Ph.D. 🌎
-% Last Updated: May 2025
+% Last Updated: AUG 2025
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% =========================================================================
@@ -48,75 +48,76 @@ addpath('Examples');                           % Examples pre-defined
 
 %% =========================================================================
 % 📂 LOAD SCENARIO
-% You can simply load a (pre-generated) workspace with all inputs already
-% configured. If you do so, please uncomment 
+% Choose one of the following options to load or configure your simulation.
 % =========================================================================
-% Option 1: Load parameters from a saved .mat file
+
+% 🔹 Option 1: Load Parameters from a Saved .mat File (Pre-generated Workspaces)
+% Uncomment ONLY one of the following as needed:
 % load('Examples/Celia1990.mat');
-% load('Examples/Example1_Infiltration_Sand.mat');
+load('Examples/Example1_Infiltration_Sand.mat');
 % load('Examples/Example2_Clay_Loam_Soil.mat');
 % load('Examples/Example3_CapillaryRise.mat');
-% load('Examples/Example4_TopNeumann_Sandy.mat');
 % load('Examples/Example4_TopNeumann_Sandy.mat');
 % load('Examples/Monitored_PP_Data.mat');
 % load('Examples/Monitored_PP_Events_Data.mat');
 
+% 🔹 Option 2: Load City-Based Scenarios
 
-% Option 2: Run Cities Scenarios
-% Run Cities Scenario
-
-% Option 3: Run a particular scenario
-% PP
-% load('Examples/PP_NWC.mat'); % 
+% Permeable Pavement (PP)
+% load('Examples/PP_NWC.mat');
 % load('Examples/PP_MIA.mat');
 % load('Examples/PP_PHX.mat');
 % load('Examples/PP_SAN.mat');
 
-%
 % Bioretention
-% load('Examples/BIO_NWC.mat'); % 
-% load('Examples/BIO_MIA.mat'); % 
-% load('Examples/BIO_PHX.mat'); % checked
-% load('Examples/BIO_SAN.mat'); % 
+% load('Examples/BIO_NWC.mat');
+% load('Examples/BIO_MIA.mat');
+% load('Examples/BIO_PHX.mat');  
+% load('Examples/BIO_SAN.mat');
 
-% Green-Roof
-% load('Examples/GR_NWC.mat'); 
-% load('Examples/GR_MIA.mat'); 
-% load('Examples/GR_PHX.mat'); 
-% load('Examples/GR_SAN.mat'); 
+% Green Roof
+% load('Examples/GR_NWC.mat');
+% load('Examples/GR_MIA.mat');
+% load('Examples/GR_PHX.mat');
+% load('Examples/GR_SAN.mat');
 
 % Pre-development Cases
-% load('Examples/PRE_NWC.mat'); 
-% load('Examples/PRE_MIA.mat'); 
-% load('Examples/PRE_PHX.mat'); 
-% load('Examples/PRE_SAN.mat'); 
+% load('Examples/PRE_NWC.mat');
+% load('Examples/PRE_MIA.mat');
+% load('Examples/PRE_PHX.mat');
+% load('Examples/PRE_SAN.mat');
 
+% 🔹 Option 3: Generate Scenario from Input Script
+% Customize your own scenario by modifying 'Input_Data.m'
+% Make sure to read the instructions inside the script
 
-% Option 4: Run input script to generate fresh config
-% Open the file Input_Data and configure your case in there. Please read
-% carefully all input data required
+% run('Input_Data.m');  % Default configurable script
 
-run('Input_Data.m');  % Default configurable script
-
+% ✅ Confirmation
 disp('📦 Input parameters loaded.');
 
-%% === Execute Solver ======================================================
-% Date Begin (YYYY, Month, Day, Hours, Minutes, Seconds)
-% This date will be used in plotting the model output time-series
-start_datetime = datetime(2023, 12, 21, 0, 10, 0); 
+%% =========================================================================
+% 🚀 EXECUTE SOLVER
+% =========================================================================
 
-% Empirical Evaporation/Evapotranspiration Coefficeints (see paper draft
-% for reference)
+% 🔹 Simulation Start Time (Used for time-series plotting)
+% Format: datetime(YYYY, MM, DD, HH, MM, SS)
+start_datetime = datetime(2023, 12, 21, 0, 10, 0);
 
-Delta = 1; % 0.3 for permeable pavements, 1 otherwise
-Gamma = 0; % 2 for permeable pavements, 0 otherwise
+% 🔹 Empirical Evaporation / Evapotranspiration Coefficients
+% These affect the surface water balance.
+% Reference values (see manuscript draft for details):
+%   - Delta: 0.3 for Permeable Pavement (PP), 1 for others
+%   - Gamma: 2 for Permeable Pavement (PP), 0 for others
 
+Delta = 1;   % General default
+Gamma = 0;   % General default
+
+%% 🔹 Run Main Solver Script
 run('Main_Solver.m');
 
-disp('✅ Simulation completed.');
-
-%% === Save Results ========================================================
+%% 🔹 Save Results ========================================================
 SaveSimulationResults
 
-%% === Run Post-Processing Visualization ===================================
+%% 🔹 Run Post-Processing Visualization ===================================
 Post_Processing;

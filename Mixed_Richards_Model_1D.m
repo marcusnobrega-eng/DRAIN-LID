@@ -54,11 +54,11 @@ addpath('Examples');                           % Examples pre-defined
 % 🔹 Option 1: Load Parameters from a Saved .mat File (Pre-generated Workspaces)
 % Uncomment ONLY one of the following as needed:
 % load('Examples/Celia1990.mat');
-% load('Examples/Example1_Infiltration_Sand.mat');
+load('Examples/Example1_Infiltration_Sand.mat');
 % load('Examples/Example2_Clay_Loam_Soil.mat');
 % load('Examples/Example3_CapillaryRise.mat');
 % load('Examples/Example4_TopNeumann_Sandy.mat');
-% load('Examples/Monitored_PP_Data.mat');
+load('Examples/Monitored_PP_Data.mat');
 % load('Examples/Monitored_PP_Events_Data.mat');
 
 % 🔹 Option 2: Load City-Based Scenarios
@@ -91,7 +91,7 @@ addpath('Examples');                           % Examples pre-defined
 % Customize your own scenario by modifying 'Input_Data.m'
 % Make sure to read the instructions inside the script
 
-run('Input_Data.m');  % Default configurable script
+% run('Input_Data.m');  % Default configurable script
 
 % ✅ Confirmation
 disp('📦 Input parameters loaded.');
