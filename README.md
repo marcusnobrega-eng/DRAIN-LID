@@ -2,7 +2,10 @@
 
 A MATLAB-based hydrological modeling framework for simulating infiltration, evaporation, and drainage in green infrastructure systems such as permeable pavements, green roofs, and bioretention cells.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+![](https://img.shields.io/github/license/marcusnobrega-eng/DRAIN-LID)
+![](https://img.shields.io/github/issues/marcusnobrega-eng/DRAIN-LID)
+![](https://img.shields.io/github/forks/marcusnobrega-eng/DRAIN-LID)
+![](https://img.shields.io/github/last-commit/marcusnobrega-eng/DRAIN-LID)
 
 <img width="1987" height="861" alt="Picture1" src="https://github.com/user-attachments/assets/347a5d4a-103c-4ecd-8564-8fb243b0f7ac" />
 
