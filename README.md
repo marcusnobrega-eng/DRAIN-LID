@@ -105,7 +105,7 @@ A full user manual is included (Docs/Manual_DRAIN_GI.pdf), covering:
 
 Several other examples are available in the \Examples folder. To run a particular example, please just load the scenario in the main code function.
 
-Full mathematical documentation of the model is available in the folder \Doc.
+[Read the docs](https://marcusnobrega-eng.github.io/DRAIN-LID/) for full documentation about the model.
 
 👤 Developer
 **Marcus N. Gomes Jr.**  
