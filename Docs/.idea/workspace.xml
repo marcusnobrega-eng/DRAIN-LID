@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b0c8bdb5-ee39-472f-93b5-a78572e0e1d9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manuscript_Draft.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model_Manual_V1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/apiref/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/apiref/lagrangianwalker.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/apiref/parallelrouting.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/apiref/particletrack.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/apiref/routines.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/background/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/environment.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example01.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example02.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example03.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example04.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example05.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example06.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example07.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example08.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example09.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example10.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example11.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example12.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example13.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/example14.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/examples/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/install/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/misc/acknowledgments.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/misc/contributing.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/misc/license.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/paper/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/publications/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/quickstart/demo01.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/quickstart/demo02.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/quickstart/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/doctrees/userguide/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/.buildinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_downloads/1aa47095608dfe0c7158725349a5adcf/demo2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_downloads/504cb022b93d57a45120d56399f684ce/demo1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_downloads/72066b4afc85e809f36daaa658d27ece/demo1_depth.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_downloads/b49a2b8d2c7497882bfac3b3dcf1a031/demo2_flow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/Catchment_Forcing_Fig.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/DRAIN_LID.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/NourishmentArea.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/NourishmentTime.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/domain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/example01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/example02.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/example03.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/example04.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/example05.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/random_walk.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/travel_paths.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/travel_paths1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/travtime_distributions.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unsteady_example.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unstructured_grid_anuga_10_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unstructured_grid_anuga_12_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unstructured_grid_anuga_15_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unstructured_grid_anuga_29_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unstructured_grid_anuga_31_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_images/unstructured_grid_anuga_31_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/apiref/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/apiref/lagrangianwalker.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/apiref/parallelrouting.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/apiref/particletrack.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/apiref/routines.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/background/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example01.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example02.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example03.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example04.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example05.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example06.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example07.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example08.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example09.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example10.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example11.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example12.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example13.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/example14.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/examples/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/install/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/misc/acknowledgments.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/misc/contributing.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/misc/license.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/paper/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/publications/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/quickstart/demo01.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/quickstart/demo02.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/quickstart/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_sources/userguide/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/alabaster.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/basic.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/custom.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/doctools.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/documentation_options.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/file.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/github-banner.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/language_data.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/minus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/plus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/pygments.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/searchtools.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/_static/sphinx_highlight.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/apiref/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/apiref/lagrangianwalker.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/apiref/parallelrouting.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/apiref/particletrack.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/apiref/routines.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/background/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example01.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example02.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example03.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example04.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example05.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example06.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example07.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example08.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example09.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example10.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example11.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example12.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example13.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/example14.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/examples/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/genindex.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/install/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/misc/acknowledgments.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/misc/contributing.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/misc/license.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/objects.inv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/paper/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/publications/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/quickstart/demo01.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/quickstart/demo02.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/quickstart/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/search.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/searchindex.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/html/userguide/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/paper/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/Catchment_Forcing_Fig.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/DRAIN_LID.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/Manuscript_Draft.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/examples/example01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/examples/example02.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/examples/example03.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/examples/example04.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/static/examples/example05.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/apiref/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/apiref/lagrangianwalker.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/apiref/parallelrouting.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/apiref/particletrack.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/apiref/routines.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/background/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/conf.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example01.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example02.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example03.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example04.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example05.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example06.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example07.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example08.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example09.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example10.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example11.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example12.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example13.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/example14.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example01/steady_anuga.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example02/steady_deltarcm.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example04/steepest_descent.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example05/timing_anuga.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example07/travel_paths.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example08/travel_paths.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example09/random_walk.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example11/domain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example11/travtime_distributions.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example12/unsteady_example.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example13/unstructured_grid_anuga_10_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example13/unstructured_grid_anuga_12_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example13/unstructured_grid_anuga_15_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example13/unstructured_grid_anuga_29_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example13/unstructured_grid_anuga_31_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example13/unstructured_grid_anuga_31_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example14/NourishmentArea.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/example14/NourishmentTime.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/logo.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/images/waxlake.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/examples/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/install/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/misc/acknowledgments.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/misc/contributing.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/misc/license.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/paper/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/publications/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/pyplots/quickstart/demo1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/pyplots/quickstart/demo1_depth.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/pyplots/quickstart/demo2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/pyplots/quickstart/demo2_flow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/quickstart/demo01.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/quickstart/demo02.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/quickstart/index.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/userguide/index.rst" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="31Act5A92On1m86MCLInzJomiFY" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b0c8bdb5-ee39-472f-93b5-a78572e0e1d9" name="Changes" comment="" />
+      <created>1754970529420</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1754970529420</updated>
+    </task>
+    <servers />
+  </component>
+</project>

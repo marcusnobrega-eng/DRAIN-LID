@@ -1,0 +1,85 @@
+% =========================================================================
+% 📂 File : Numerical_Solver/compute_jacobian.m
+%
+% 🔁 FUNCTION: compute_jacobian
+% Purpose : Build a robust FD Jacobian J = dF/dh for the mixed-form
+%           Richards equation. This version:
+%             • uses ADAPTIVE finite-difference steps (per node),
+%             • FREEZES non-smooth sources (drainage/BC toggles) during the
+%               FD sweep to avoid on/off kinks,
+%             • adds a tiny DIAGONAL CAPACITY FLOOR so J stays well
+%               conditioned in very dry states,
+%             • optionally regularizes if J is ill-conditioned.
+%
+% Inputs:
+%   h, h_old        : [Nz x 1] pressure head (current, previous)
+%   params          : struct with fields (Nz, dt, dz, Ks, theta_r, theta_s,
+%                     alpha, n, m, ... + drainage/orifice params)
+%   top_val         : current top BC value (flux or head)
+%   bottom_val      : current bottom BC value (flux or head)
+%   source_term_fixed : external volumetric sources/sinks [Nz x 1]
+%   top_bc_type_used  : string/char indicating top BC type used this step
+%
+% Output:
+%   J : [Nz x Nz] sparse Jacobian
+%
+% Author : Marcus Nóbrega, Ph.D. (updated with robustness tweaks)
+% =========================================================================
+function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term_fixed, top_bc_type_used)
+
+    %% 1) Sizes & adaptive FD step ----------------------------------------
+    Nz = params.Nz;
+
+    % Per-node perturbation to reduce subtractive cancellation:
+    % eps_j = max(eps_abs, eps_rel * max(1, |h_j|))
+    eps_rel = 1e-8;        % try 1e-8 to 1e-6 if needed
+    eps_abs = 1e-8;
+    eps_j   = max(eps_abs, eps_rel * max(1, abs(h)));
+
+    % Preallocate sparse; FD is banded but allow a bit more nonzeros
+    J = spalloc(Nz, Nz, 5 * Nz);
+
+    %% 2) Base residual with FROZEN non-smooth sources --------------------
+    theta_old  = theta_vgm(h_old,  params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+    theta_base = theta_vgm(h,      params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+    K_base     = K_vgm(  h,        params.Ks,      params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+
+    % Freeze drainage/structural sinks for the entire FD sweep (critical)
+    [source_drain_base, ~, ~] = drainage_sinks( ...
+        h, (params.theta_s - params.theta_r), params.dz, params.dt, ...
+        params.K_orifice, params.exp_orifice, ...
+        params.spillway_enabled, params.c_spillway, ...
+        params.h_spill, params.exp_spillway);
+
+    source_total_base = source_term_fixed + source_drain_base;
+
+    % Base residual
+    F0 = compute_residual(h, h_old, theta_base, theta_old, K_base, ...
+                          params, top_val, bottom_val, source_total_base, top_bc_type_used);
+
+    %% 3) Column-by-column FD (sources kept frozen) -----------------------
+    for j = 1:Nz
+        hp    = h;
+        hp(j) = h(j) + eps_j(j);
+
+        theta_p = theta_vgm(hp, params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+        K_p     = K_vgm(  hp, params.Ks,      params.theta_r, params.theta_s, params.alpha, params.n, params.m);
+
+        % NOTE: Do NOT recompute drainage_sinks here; use the frozen source
+        Fp = compute_residual(hp, h_old, theta_p, theta_old, K_p, ...
+                              params, top_val, bottom_val, source_total_base, top_bc_type_used);
+
+        J(:, j) = sparse( (Fp - F0) / eps_j(j) );
+    end
+
+    %% 4) Diagonal "capacity floor" (keeps J well-conditioned in dry media)
+    % Mimics adding a tiny artificial storage Cmin to the transient term.
+    Cmin = 1e-10;                              % [1/m] try 1e-10 to 1e-8
+    J = J + (Cmin / params.dt) * speye(Nz);
+
+    % %% 5) Optional safety regularization if ill-conditioned ---------------
+    % rJ = rcond(J);
+    % if ~isfinite(rJ) || rJ < 1e-12
+    %     J = J + (1e-12 + 1e-6/params.dt) * speye(Nz);  % time-step–aware tau
+    % end
+end

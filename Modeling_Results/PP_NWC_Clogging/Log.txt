@@ -1,0 +1,51 @@
+=====================================================
+🔧 Mixed-Form Richards Model — Simulation Log
+=====================================================
+
+🟢 Simulation Name     : PP_NWC_Clogging
+📅 Date and Time       : 06-Oct-2025 08:54:40
+⏱️ Duration            : 262992.00 hr
+💾 Save Interval       : 1440.00 min
+
+📐 Mesh Information
+    • Number of Nodes      : 27
+    • Total Depth          : 0.33 m
+    • Top Node Elevation   : 0.00 m
+    • Min Cell Thickness   : 0.0090 m
+    • Max Cell Thickness   : 0.0137 m
+
+🌱 Soil Hydraulic Properties (Van Genuchten)
+    • α       : 3.6305 1/m
+    • n       : 2.3192 [-]
+    • m       : 0.5641 [-]
+    • θ_s     : 0.2829 [m³/m³]
+    • θ_r     : 0.0050 [m³/m³]
+    • K_s     : 9.36e-03 [m/s]
+    • S_s     : 1.00e-05 [1/m]
+
+🔲 Boundary Conditions
+    • Top BC Type     : neumann
+      > Value         : 0.0000
+    • Bottom BC Type  : free
+      > Value         : 0.0000
+
+💧 Drainage Sinks Information
+    • Orifices Enabled     : No
+    • Spillway Enabled     : Yes
+    • Spillway Coefficient : 0.0000 [m^(exp_spillway)/s]
+    • Spillway Exponent    : 1.50
+    • Spillway Height      : 0.05 [m]
+
+⚙️ Solver Configuration
+    • Initial dt            : 86400.0000 s
+    • Min/Max dt            : [0.1000, 86400.0000] s
+    • Max Newton Iterations : 40
+    • Adapt Up/Down         : [2.00, 0.50]
+    • Convergence Threshold : 1.0e-03
+
+🛠️  Source Term Included  : Yes
+    • Total Integrated Source [m³/m²]: 0.0000
+
+=====================================================
+📍 End of Log
+=====================================================

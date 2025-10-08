@@ -83,6 +83,46 @@ T_extra.Properties.VariableUnits = ...
 
 writetable(T_extra, filename, 'Sheet', 'SurfaceOutlet', 'WriteVariableNames', true);
 
+%% === 4b. Clogging State (θs and Ks for all cloggable nodes) =============
+% Write only if clogging was active and buffers exist
+if exist('clogging_active','var') && clogging_active && exist('mask_idx','var') && ~isempty(mask_idx) ...
+        && ~isempty(theta_s_out) && ~isempty(Ks_out)
+
+    % Align to saved time rows
+    data_length = length(time_seconds);
+
+    % Column names for all cloggable nodes
+    theta_vars = strcat("theta_s_Node_", string(mask_idx));
+    Ks_vars    = strcat("Ks_Node_",      string(mask_idx));
+
+    % Blocks [time x nodes]
+    theta_block = theta_s_out(:, 1:data_length)';  % transpose
+    Ks_block    = Ks_out(:,      1:data_length)';
+
+    % Optional proxy at node 1
+    if exist('Ks_node1_series','var') && ~isempty(Ks_node1_series)
+        T_clog = array2table( ...
+            [time_seconds, time_minutes, time_days, Ks_node1_series(1,1:data_length)', theta_block, Ks_block], ...
+            'VariableNames', ...
+            ['Time_s','Time_min','Time_day','Ks_Node1_m_per_s', theta_vars, Ks_vars] ...
+        );
+        T_clog.Properties.VariableUnits = [ ...
+            {'s','min','day','m/s'}, repmat({'m3/m3'},1,numel(theta_vars)), repmat({'m/s'},1,numel(Ks_vars))];
+    else
+        T_clog = array2table( ...
+            [time_seconds, time_minutes, time_days, theta_block, Ks_block], ...
+            'VariableNames', ...
+            ['Time_s','Time_min','Time_day', theta_vars, Ks_vars] ...
+        );
+        T_clog.Properties.VariableUnits = [ ...
+            {'s','min','day'}, repmat({'m3/m3'},1,numel(theta_vars)), repmat({'m/s'},1,numel(Ks_vars))];
+    end
+
+    % Write sheet
+    writetable(T_clog, filename, 'Sheet', 'Clogging', 'WriteVariableNames', true);
+end
+
+
 %% === 5. Volume Balance Summary (Scalar Values) ==========================
 T_vol = table(inflow_vol, outflow_vol, seepage_vol, evaporation_vol, final_storage, ...
     'VariableNames', {'InflowVol_m', 'OutflowVol_m', 'SeepageVol_m', 'EvaporationVol_m', 'final_storage_m'});
@@ -128,6 +168,20 @@ fprintf(fid, '\n--- Output Paths ---\n');
 fprintf(fid, 'Base Folder           : %s\n', base_output_dir);
 fprintf(fid, 'Data Folder           : %s\n', data_dir);
 fprintf(fid, 'Figures Folder        : %s\n', figures_dir);
+
+fprintf(fid, '\n--- Clogging Settings ---\n');
+if exist('clog','var') && exist('clogging_active','var') && clogging_active
+    if isfield(clog,'gamma'),   fprintf(fid, 'gamma                : %.4g [1/m]\n', clog.gamma); end
+    if isfield(clog,'mK'),      fprintf(fid, 'mK (Ks exponent)     : %.4g [-]\n', clog.mK); end
+    if isfield(clog,'phi_min'), fprintf(fid, 'phi_min (θs floor)   : %.4g [m3/m3]\n', clog.phi_min); end
+    if isfield(clog,'eta'),     fprintf(fid, 'eta (maint. recovery): %.4g [-]\n', clog.eta); end
+    if isfield(clog,'mask')
+        fprintf(fid, 'Masked nodes count   : %d\n', nnz(clog.mask));
+        fprintf(fid, 'Masked nodes (idx)   : %s\n', mat2str(find(clog.mask)));
+    end
+else
+    fprintf(fid, 'Clogging             : not enabled\n');
+end
 
 fprintf(fid, '\n--- Notes ---\n');
 fprintf(fid, '(Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)\n');
