@@ -43,6 +43,28 @@ outflow_vol = 0;
 seepage_vol = 0;
 evaporation_vol = 0;
 infiltration_vol = 0;
+time_step = zeros(size(head_out,2));
+
+% --- Clogging capture setup (records only if clogging is active) ---------
+clogging_active = isfield(params,'enable_clogging') && islogical(params.enable_clogging) ...
+                  && params.enable_clogging && exist('clog','var') ...
+                  && isfield(clog,'mask') && ~isempty(clog.mask);
+
+if clogging_active
+    mask_idx   = find(clog.mask);                          % all nodes that can clog
+    nsave_est  = ceil(params.Tmax/params.save_interval) + 2;
+    theta_s_out      = nan(numel(mask_idx), nsave_est);    % θs for cloggable nodes
+    Ks_out           = nan(numel(mask_idx), nsave_est);    % Ks for cloggable nodes
+    Ks_node1_series  = nan(1, nsave_est);                  % optional proxy at node 1
+else
+    mask_idx         = [];
+    theta_s_out      = [];
+    Ks_out           = [];
+    Ks_node1_series  = [];
+end
+saved_this_step = false;    % toggled when we save a time slice
+
+
 % === TIME LOOP ===========================================================
 while t <= t_end
 
@@ -51,6 +73,10 @@ while t <= t_end
     h_new = h_old;
     tstep = tstep + 1;
     index_failure = 0;
+
+    if t >= 2765700*60
+        ttt = 1;
+    end
 
 
     ponding_prev   = ponding_depth;
@@ -83,8 +109,8 @@ while t <= t_end
 
             %% === 🔍 Line Search: Robust Convergence =====================
             lambda     = 1.0;  % Full Newton step
-            lambda_min = 1e-6;
-            beta       = 0.5;  % Backtracking factor
+            lambda_min = 1e-8;
+            beta       = 0.25;  % Backtracking factor
             eta        = 1e-4; % Armijo criterion
             res_norm_0 = norm(F);
 
@@ -110,7 +136,8 @@ while t <= t_end
 
                 
                 % Regular Line-Search Approach
-                if norm(F_trial) < (1 - eta * lambda) * res_norm_0
+                threshold_it = eps;
+                if norm(F_trial) < threshold_it || norm(F_trial) < (1 - eta * lambda) * res_norm_0 
                     h_new = h_trial;
                     success = true;
                     break;
@@ -127,8 +154,8 @@ while t <= t_end
             [mb_error, ~, ~, current_storage] = mass_balance_check( ...
                 h_old, h_new, ponding_prev, ponding_depth, q_prev, q, t, params.dt, mb_error_cumulative, params, cumulative_net_flux_prev, Q_orifice, Q_spillway, Q_orifice_prev, Q_spillway_prev, top_bc_type_used, print_error);
             
-            mb_tol = 1e-3;  % Set mass balance tolerance [adjust as needed]
-
+            mb_tol = 1e-4;  % Set mass balance tolerance [adjust as needed]
+            
             if norm(delta) < params.tol && norm(F) < params.tol && abs(mb_error) < mb_tol
                 converged = true;
                 break;
@@ -217,7 +244,7 @@ while t <= t_end
 
         % overall_mb_error = (inflow_vol - final_storage - outflow_vol)/inflow_vol*100
 
-
+        time_step(save_count)       = params.dt;
         if params.bottom_bc_type == "noflow"
             seepage_flux(save_count) = max(0, q_now(1));
         else
@@ -229,12 +256,29 @@ while t <= t_end
 
 
         save_index = save_index + 1;
+        % flag: this time slice was saved; record θs/Ks after clogging update
+        saved_this_step = true;
     end
 
 
 
     %% === ✅ Accept Time Step ===========================================
     h = h_new;
+
+    % --- Only update clogging if the flag **exists and is true** ---
+    if isfield(params,'enable_clogging') && islogical(params.enable_clogging) && params.enable_clogging
+        [params, clog] = update_clogging(params, clog, q, params.dt, t);
+    end
+
+    % --- If clogging is active and we saved this step, record θs and Ks now ---
+    if clogging_active && saved_this_step
+        theta_s_out(:, save_count)     = params.theta_s(mask_idx);
+        Ks_out(:, save_count)          = params.Ks(mask_idx);
+        if ~isempty(Ks_node1_series)
+            Ks_node1_series(1, save_count) = params.Ks(1);  % optional proxy
+        end
+        saved_this_step = false;
+    end
 
     % === ⏳ Snap Time Step to Next Save Interval ============================
     next_save_time = params.save_interval * save_count;

@@ -54,15 +54,15 @@ addpath('Examples');                           % Examples pre-defined
 % 🔹 Option 1: Load Parameters from a Saved .mat File (Pre-generated Workspaces)
 % Uncomment ONLY one of the following as needed:
 % load('Examples/Celia1990.mat');
-load('Examples/Example1_Infiltration_Sand.mat');
+% load('Examples/Example1_Infiltration_Sand.mat');
 % load('Examples/Example2_Clay_Loam_Soil.mat');
 % load('Examples/Example3_CapillaryRise.mat');
 % load('Examples/Example4_TopNeumann_Sandy.mat');
-load('Examples/Monitored_PP_Data.mat');
+% load('Examples/Monitored_PP_Data.mat');
 % load('Examples/Monitored_PP_Events_Data.mat');
 
 % 🔹 Option 2: Load City-Based Scenarios
-
+% --- Daily Forcing
 % Permeable Pavement (PP)
 % load('Examples/PP_NWC.mat');
 % load('Examples/PP_MIA.mat');
@@ -81,6 +81,32 @@ load('Examples/Monitored_PP_Data.mat');
 % load('Examples/GR_PHX.mat');
 % load('Examples/GR_SAN.mat');
 
+% --- Daily Forcing with Clogging and Maintenance
+% Permeable Pavement (PP)
+load('Examples/PP_NWC_Clogging.mat');
+% load('Examples/PP_MIA_Clogging.mat');
+% load('Examples/PP_PHX_Clogging.mat');
+% load('Examples/PP_SAN_Clogging.mat');
+
+% --- Hourly Forcing
+% Permeable Pavement (PP)
+% load('Examples/PP_NWC_Hourly.mat');
+% load('Examples/PP_MIA_Hourly.mat');
+% load('Examples/PP_PHX_Hourly.mat');
+% load('Examples/PP_SAN_Hourly.mat');
+
+% Bioretention
+% load('Examples/BIO_NWC_Hourly.mat');
+% load('Examples/BIO_MIA_Hourly.mat');
+% load('Examples/BIO_PHX_Hourly.mat');  
+% load('Examples/BIO_SAN_Hourly.mat');
+
+% Green Roof
+% load('Examples/GR_NWC_Hourly.mat');
+% load('Examples/GR_MIA_Hourly.mat');
+% load('Examples/GR_PHX_Hourly.mat');
+% load('Examples/GR_SAN_Hourly.mat');
+
 % Pre-development Cases
 % load('Examples/PRE_NWC.mat');
 % load('Examples/PRE_MIA.mat');
@@ -96,13 +122,15 @@ load('Examples/Monitored_PP_Data.mat');
 % ✅ Confirmation
 disp('📦 Input parameters loaded.');
 
+
 %% =========================================================================
 % 🚀 EXECUTE SOLVER
 % =========================================================================
 
 % 🔹 Simulation Start Time (Used for time-series plotting)
 % Format: datetime(YYYY, MM, DD, HH, MM, SS)
-start_datetime = datetime(2023, 12, 21, 0, 10, 0);
+% start_datetime = datetime(2023, 12, 21, 0, 10, 0);
+start_datetime = datetime(1995, 1, 1, 0, 0, 0);
 
 % 🔹 Empirical Evaporation / Evapotranspiration Coefficients
 % These affect the surface water balance.
@@ -110,7 +138,7 @@ start_datetime = datetime(2023, 12, 21, 0, 10, 0);
 %   - Delta: 0.3 for Permeable Pavement (PP), 1 for others
 %   - Gamma: 2 for Permeable Pavement (PP), 0 for others
 
-Delta = 1;   % General default
+Delta = 0.0;   % General default
 Gamma = 0;   % General default
 
 %% 🔹 Run Main Solver Script

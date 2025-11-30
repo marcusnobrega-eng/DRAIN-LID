@@ -52,7 +52,6 @@ function [z, dz] = generate_nonlinear_mesh(Nz, L, nonlin_factor, mesh_dir)
     grid on;
     set(gca, 'FontSize', 13, 'TickDir', 'out', 'LineWidth', 1.5);
 
-    % Export as PNG (300 DPI)
-    
-    print(gcf, fullfile(mesh_dir, 'Spatial_Mesh.png'), '-dpng', '-r300');
+    % Export as PNG (300 DPI)   
+    print(gcf, fullfile(mesh_dir, 'Spatial_Mesh.png'), '-dpng', '-r300');    
 end

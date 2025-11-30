@@ -71,9 +71,6 @@ function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term
 
     % === Store analytical derivatives of drainage ========================
     dq_drainage_total = dq_orifice + dq_spill;
-    if sum(dq_drainage_total) < 0 
-        ttt = 1;
-    end
 
     % === Combine total source term =================================
     source_term_value = source_term_fixed + source_drainage;
@@ -143,5 +140,9 @@ function J = compute_jacobian(h, h_old, params, top_val, bottom_val, source_term
         % end
     end
 end 
+
+
+
+
 
 

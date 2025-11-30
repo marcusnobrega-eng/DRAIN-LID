@@ -127,6 +127,21 @@ params.Ks      = media_props.Ks(media_id);
 % Water Retention Curves
 plot_vg_retention_curves(media_props, params, figures_dir)
 
+% --- Clogging setup (opt-in; safe if field missing) ---
+clog = struct();   % harmless placeholder
+if isfield(params,'enable_clogging') && islogical(params.enable_clogging) && params.enable_clogging
+    clog_opt = struct( ...
+        'gamma',        2e-3, ...      % 1/m (Gamma)
+        'mK',           3.0, ...       % exponent decay of Ks with inf. depth [-]
+        'phi_min_frac', 0.10, ...      % minimum tolerable theta_s from theta_s original
+        'eta',          0.9, ...       % parameter renew after maintenance
+        'maintenance_period_days', 365, ...    % or [] and set 'maintenance_dates_sec'
+        'top_N_cells',  10 ...                  % clog top-N cells (override with your choice)
+        );
+    [params, clog] = configure_clogging(params, clog_opt);
+end
+
+
 % === 4. SOLVER ITERATION ERROR TOLERANCE  ==============================================
 % Newtown Raphson + Line Search Error Tolerance
 params.tol = 1e-6; % [m]
@@ -317,6 +332,14 @@ fprintf(fid, '    • Min/Max dt            : [%.4f, %.4f] s\n', params.dt_min, 
 fprintf(fid, '    • Max Newton Iterations : %d\n', params.max_iters);
 fprintf(fid, '    • Adapt Up/Down         : [%.2f, %.2f]\n', params.adapt_up, params.adapt_down);
 fprintf(fid, '    • Convergence Threshold : %.1e\n', params.tol);
+fprintf(fid, '\n');
+
+% === Clogging status (ON/OFF) =============================================
+status = 'OFF';
+if isfield(params,'enable_clogging') && islogical(params.enable_clogging) && params.enable_clogging
+    status = 'ON';
+end
+fprintf(fid, '🧱 Clogging physics      : %s\n', status);
 fprintf(fid, '\n');
 
 % === Source/Sink Terms

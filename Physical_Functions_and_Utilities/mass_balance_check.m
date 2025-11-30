@@ -82,6 +82,7 @@ function [mb_error, mb_error_cumulative, cumulative_net_flux_post, S_now_total] 
     else
         net_top_input = 0;
     end
+
     
     %% === 4. Compute Average Volumetric Source [m³/m³/s] =================
     % source_now = interp1(params.source_times, params.source_profile', t, 'linear', 'extrap')';

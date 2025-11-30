@@ -1152,8 +1152,8 @@ params.bottom_bc_value = 0;         % [m] (ignored for 'free' and 'noflow')
 % Example rainfall or use a constant value
 dt_input = 60; Nt_input = round(params.Tmax / dt_input); 
 t_input  = (0:Nt_input - 1) * dt_input;
-params.surface_flux_time = t_input; 
-params.surface_flux_vals = -0.0000278 * ones(1,Nt_input); % Example rainfall or use a constant value
+params.surface_flux_time = t_input'; 
+params.surface_flux_vals = -0.0000278 * ones(1,Nt_input)'; % Example rainfall or use a constant value
 
 
 % params.surface_flux_vals = -ones(1,length(params.surface_flux_vals)) * 1000 / 1000 / 3600; % 10 mm/h
