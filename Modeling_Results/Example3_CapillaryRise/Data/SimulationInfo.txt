@@ -2,7 +2,7 @@
    MIXED-FORM RICHARDS SIMULATION SUMMARY
 ============================================
 Simulation Name       : Example3_CapillaryRise
-Date                  : 31-May-2025 19:25:47
+Date                  : 07-Oct-2025 18:52:15
 
 --- Domain & Discretization ---
 Number of Nodes (Nz)  : 41
@@ -27,6 +27,9 @@ Bottom BC Value       : 0.000
 Base Folder           : Modeling_Results\Example3_CapillaryRise
 Data Folder           : Modeling_Results\Example3_CapillaryRise\Data
 Figures Folder        : Modeling_Results\Example3_CapillaryRise\Figures
+
+--- Clogging Settings ---
+Clogging             : not enabled
 
 --- Notes ---
 (Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)

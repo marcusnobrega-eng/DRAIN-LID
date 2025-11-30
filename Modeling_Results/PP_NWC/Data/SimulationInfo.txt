@@ -2,7 +2,7 @@
    MIXED-FORM RICHARDS SIMULATION SUMMARY
 ============================================
 Simulation Name       : PP_NWC
-Date                  : 28-Jul-2025 18:43:01
+Date                  : 07-Oct-2025 14:50:06
 
 --- Domain & Discretization ---
 Number of Nodes (Nz)  : 27
@@ -10,8 +10,8 @@ Domain Depth (L) [m]  : 0.325
 Grid Refinement (n)   : 1.10
 
 --- Time Settings ---
-Initial Δt [s]        : 43200.00
-Min Δt [s]            : 0.00
+Initial Δt [s]        : 14850.00
+Min Δt [s]            : 0.10
 Max Δt [s]            : 86400.00
 Total Time [s]        : 946771200.00
 Save Interval [s]     : 86400.00
@@ -27,6 +27,9 @@ Bottom BC Value       : 0.000
 Base Folder           : Modeling_Results\PP_NWC
 Data Folder           : Modeling_Results\PP_NWC\Data
 Figures Folder        : Modeling_Results\PP_NWC\Figures
+
+--- Clogging Settings ---
+Clogging             : not enabled
 
 --- Notes ---
 (Model Developed by Marcus Nobrega, Ph.D. Feel free to contact me at marcusnobrega.engcivil@gmail.com.)
