@@ -30,31 +30,31 @@ base_params.Gamma = 0;   % General default
 %% 1. Discrete sets and constants
 
 % Hydrologic inputs (catchment-scale effective precipitation, mm)
-Peff_set_mm = [0.5, 0.75, 1 1.25 1.5]*25.4;   % [mm] over upstream catchment
-% Peff_set_mm = 25.4*1;
-% Peff_set_mm = [50, 100];   % [mm] over upstream catchment
+Peff_set_mm = [0.5]*25.4;   % [mm] over upstream catchment
 
 % Upstream catchment areas [m^2]
-Aup_set_m2  = [100, 250, 500, 750, 1000, 2000, 5000, 10000, 20000];   % A_up
+Aup_set_m2  = [1];   % A_up
 
 % Design variable: contributing-area ratio (A_up / A_TC)
 % You can adjust these as you like
-area_ratio_set = [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.3, 0.5];   % (ATC / Aup)
+area_ratio_set = [0.01:0.01:0.2];   % (ATC / Aup)
 
 % Time to peak of inflow hydrograph (minutes)
 % tp_set_min  = [15, 30, 60];        % [min]
 % tp_set_min  = [5, 10, 15, 30];        % [min]
-tp_set_min = [5, 10, 15, 30, 45, 60]; 
+tp_set_min = [30]; 
 % tp_set_min = 5;
 
 
-Ld_set_m    = [0.2, 0.3, 0.4, 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2]; % [m] media depth
+Ld_set_m    = [0.4:0.1:1.2]; % [m] media depth
+% Ld_set_m    = [0.3 0.4 0.5 0.6]; % [m] media depth
+
 
 % Soil hydraulic parameter sets (van Genuchten–Mualem)
 % TODO: replace with your actual calibrated table (from HYDRUS / Carsel & Parrish)
 Soils = define_soils();   % returns struct array with fields:
                           % name, theta_r, theta_s, alpha_1perm, n, Ks_mm_per_h
-
+Soils = Soils(1);
 nSoil      = numel(Soils);
 nAup       = numel(Aup_set_m2);
 nAreaRatio = numel(area_ratio_set);
@@ -117,6 +117,9 @@ combo_idx = 0;
 % Time series: store Q_in and Q_out at 5-min resolution
 Qin_all  = nan(nSteps, N_total);   % [m^3/s]
 Qout_all = nan(nSteps, N_total);   % [m^3/s]
+Se_top_all    = nan(nSteps, N_total);   % [-]
+Se_mid_all    = nan(nSteps, N_total);   % [-]
+Se_bottom_all = nan(nSteps, N_total);   % [-]
 
 k = 0;   % feasible scenario counter
 
@@ -171,7 +174,7 @@ for iSoil = 1:nSoil
                         Qp_in = max(Qin);   % [m^3/s]
 
                         % --- Call DRAIN-LID Richards solver ---
-                        [Qout, h_surf] = run_drain_lid( ...
+                        [Qout, h_surf, t_save_hours, Se_top, Se_mid, Se_bottom] = run_drain_lid( ...
                             t_hours, Qin, ATC, Ld, soil, base_params);
 
                         % If solver failed or returned invalid outputs, skip
@@ -193,6 +196,11 @@ for iSoil = 1:nSoil
                         % Store time series
                         Qin_all(:, k)  = Qin;
                         Qout_all(:, k) = Qout;
+
+                        %%% store Se time series (top, mid, bottom)
+                        Se_top_all(:,    k) = Se_top(:);
+                        Se_mid_all(:,    k) = Se_mid(:);
+                        Se_bottom_all(:, k) = Se_bottom(:);
 
                         % Compute metrics
                         [eta_p, Delta_tp_min, DetTime_min, Qp_out, DeltaV_m3] = ...
@@ -228,18 +236,27 @@ if k < N_total
     Metrics   = Metrics(1:k);
     Qin_all   = Qin_all(:, 1:k);
     Qout_all  = Qout_all(:, 1:k);
+    Se_top_all     = Se_top_all(:, 1:k);      
+    Se_mid_all     = Se_mid_all(:, 1:k);      
+    Se_bottom_all  = Se_bottom_all(:, 1:k); 
 end
 
 % Removing cases with no outflow
-idx = max(Qout_all) == 0;
-Metrics(idx) = [];
-Qin_all(idx) = [];
-Qout_all(idx) = [];
+idx = max(Qout_all) == 0;      % 1 x k logical (per scenario/column)
+
+Metrics(idx)        = [];
+Qin_all(:,  idx)    = [];
+Qout_all(:, idx)    = [];
+Se_top_all(:,    idx) = [];    %%%% NEW
+Se_mid_all(:,    idx) = [];    %%%% NEW
+Se_bottom_all(:, idx) = [];    %%%% NEW
 
 %% 5. Save database
 
-save('DRAIN_LID_database.mat', ...
-     'Metrics', 'Qin_all', 'Qout_all', 't_minutes', 'Soils', ...
+save('DRAIN_LID_database_single.mat', ...
+     'Metrics', 'Qin_all', 'Qout_all', ...
+     'Se_top_all', 'Se_mid_all', 'Se_bottom_all', ...   %%%% NEW
+     't_minutes', 'Soils', ...
      'Peff_set_mm', 'tp_set_min', 'Aup_set_m2', 'area_ratio_set', 'Ld_set_m', ...
      'h_max_allow', 'm_shape', 'b_factor');
 
@@ -446,7 +463,7 @@ base_params.LID_area = 1.0;
 
 end
 
-function [Qout, h_surf, t_save_hours] = run_drain_lid(t_hours, Qin, ATC, Ld, soil, base_params)
+function [Qout, h_surf, t_save_hours, Se_top, Se_mid, Se_bottom] = run_drain_lid(t_hours, Qin, ATC, Ld, soil, base_params)
 %RUN_DRAIN_LID  Configure and run one DRAIN-LID simulation for the database.
 %
 % Inputs:
@@ -594,13 +611,17 @@ params.source_profile = zeros(params.Nz, numel(params.source_times));  % [Nz x 2
 % 8. Run the mixed-form Richards solver
 % -------------------------------------------------------------------------
 [head_out, theta_out, flux_out, ponding_series, ...
-          outlet_flux, time_series, max_ponding_depth, success] = Main_Solver_Function(params);
+          outlet_flux, time_series, max_ponding_depth, ...
+          Se_top, Se_mid, Se_bottom, success] = Main_Solver_Function(params);   %%%% NEW
 
 % If solver failed, return empty so the outer loop can skip this design
 if ~success || isempty(time_series) || isempty(outlet_flux)
     Qout   = [];
     h_surf = [];
     t_save_hours = [];
+    Se_top       = [];   
+    Se_mid       = [];   
+    Se_bottom    = [];   
     return;
 end
 % -------------------------------------------------------------------------

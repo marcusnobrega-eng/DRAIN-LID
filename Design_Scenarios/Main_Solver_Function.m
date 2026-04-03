@@ -1,5 +1,6 @@
-function [head_out, theta_out, flux_out, ponding_series, outlet_flux, time_series, success] = Main_Solver_Function(params)
-
+function [head_out, theta_out, flux_out, ponding_series, ...
+          outlet_flux, time_series, max_ponding_depth, ...
+          Se_top, Se_mid, Se_bottom, success] = Main_Solver_Function(params)
 % =========================================================================
 % 📂 File Location : Numerical_Solver/Main_Solver.m
 %
@@ -69,6 +70,11 @@ ponding_series  = zeros(1,    n_save);
 outlet_flux     = zeros(1,    n_save);
 time_series     = zeros(1,    n_save);
 
+%%% NEW: Effective saturation at top / mid / bottom node
+Se_top    = nan(1, n_save);   % top node (= surface)
+Se_mid    = nan(1, n_save);   % middle node
+Se_bottom = nan(1, n_save);   % bottom node
+
 seepage_flux     = zeros(1, n_save);
 Q_orifice_total  = zeros(1, n_save);
 Q_spillway_total = zeros(1, n_save);
@@ -121,6 +127,8 @@ else
     ponding_depth = 0;
 end
 
+% 🔹 Track maximum ponding depth over the whole simulation
+max_ponding_depth = ponding_depth;
 %% === ⏱ Initialization ==================================================
 t_end = Tmax;
 nonconv_dtmin_steps = 0;   % number of consecutive time steps that failed at dt_min
@@ -223,10 +231,6 @@ while t <= t_end
                 end
             end
             
-            if h_new(end) > 0.15 % Larger than 15 cm, we break
-                return
-            end
-
             %% === ✅ Check Convergence + Mass Balance ====================
             print_error = 0;
             [mb_error, ~, ~, current_storage] = mass_balance_check( ...
@@ -270,6 +274,12 @@ while t <= t_end
                 params.dt = max(params.dt * params.adapt_down, params.dt_min);
             end
 
+            if h_new(end) > 1 % Larger than 100 cm, we break
+                warning('Ponding depth larger than 100 cm')
+                success = false;
+                return
+            end
+
             % On success, reset the non-convergence counter
             nonconv_dtmin_steps = 0;
 
@@ -297,7 +307,7 @@ while t <= t_end
             warning('Time step at t = %.2f s did not converge with dt_min (attempt %d of 10).', ...
                 t, nonconv_dtmin_steps);
 
-            if nonconv_dtmin_steps > 10
+            if nonconv_dtmin_steps > 2
                 warning('❌ Simulation stopped: more than 10 consecutive non-convergent steps at dt_min.');
                 success = false;
                 head_out        = [];
@@ -306,6 +316,10 @@ while t <= t_end
                 ponding_series  = [];
                 outlet_flux     = [];
                 time_series     = [];
+                max_ponding_depth = [];
+                Se_top    = [];    
+                Se_mid    = [];    
+                Se_bottom = [];   
                 return;
             else
                 % Try this *same* time step again in the next while-iteration
@@ -323,6 +337,10 @@ while t <= t_end
             ponding_series  = [];
             outlet_flux     = [];
             time_series     = [];
+            max_ponding_depth = []; 
+            Se_top    = [];         
+            Se_mid    = [];          
+            Se_bottom = [];         
             return;
         end
     end
@@ -374,6 +392,17 @@ while t <= t_end
         ponding_series(save_count) = ponding_depth;
         outlet_flux(save_count)    = q_now(1);
         time_series(save_count)    = t;
+        %%% NEW: Effective saturation profile and extract top/mid/bottom
+        % Se = (theta - theta_r) / (theta_s - theta_r)
+        Se_profile = (theta_now - params.theta_r) ./ (params.theta_s - params.theta_r);
+    
+        idx_bottom = 1;                  % z(1) is bottom (deepest node)
+        idx_top    = Nz;                 % z(end) is surface node
+        idx_mid    = round((Nz + 1)/2);  % middle node
+    
+        Se_bottom(save_count) = Se_profile(idx_bottom);
+        Se_mid(save_count)    = Se_profile(idx_mid);
+        Se_top(save_count)    = Se_profile(idx_top);
 
         if params.bottom_bc_type == "noflow"
             seepage_flux(save_count) = max(0, q_now(1));
@@ -383,6 +412,11 @@ while t <= t_end
 
         Q_orifice_total(save_count)  = sum(Q_orifice(:));
         Q_spillway_total(save_count) = sum(Q_spillway(:));
+
+        % 🔹 Update maximum ponding depth
+        if ponding_depth > max_ponding_depth
+            max_ponding_depth = ponding_depth;
+        end
 
         save_index = save_index + 1;
     end
